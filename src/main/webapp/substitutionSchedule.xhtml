@@ -1,0 +1,175 @@
+<ui:composition template="/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="title">Aufgaben</ui:define>
+
+    <ui:define name="content">
+        <b:modal id="amodal" title="Neue Vertretung" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="delete-member-form">
+                <b:inputText placeholder="Titel"
+                             value="#{SubstitutionScheduleController.currentSub.title}"></b:inputText>
+                <b:inputText placeholder="Beschreibung"
+                             value="#{SubstitutionScheduleController.currentSub.description}"></b:inputText>
+                <b:selectOneMenu binding="#{inputAppointmentAdd}"
+                                 value="#{SubstitutionScheduleController.currentSub.appointmentID}">
+                    <f:selectItem itemLabel="Kein Termin" itemValue="0"/>
+                    <f:selectItems value="#{SubstitutionScheduleController.appointments}" var="c" itemValue="#{c.ID}"
+                                   itemLabel="#{c.title}"/>
+                </b:selectOneMenu>
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" value="Hinzufuegen"
+                                     style="margin-top:40px;margin-left:20px"
+                                     onclick="ajax:SubstitutionScheduleController.addCurrentSubstitution()"
+                                     oncomplete="javascript:$('#amodal').modal('hide');return false;"
+                                     update="projects"/>
+                </div>
+            </h:form>
+        </b:modal>
+
+        <b:modal id="editSubsitutionModal" title="Vertretung bearbeiten" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="edit-substitution-form">
+                <b:inputText placeholder="Titel"
+                             value="#{SubstitutionScheduleController.currentSub.title}"></b:inputText>
+                <b:inputText placeholder="Beschreibung"
+                             value="#{SubstitutionScheduleController.currentSub.description}"></b:inputText>
+                <b:selectOneMenu binding="#{inputAppointment}"
+                                 value="#{SubstitutionScheduleController.currentSub.appointmentID}">
+                    <f:selectItem itemLabel="Kein Termin" itemValue="0"/>
+                    <f:selectItems value="#{SubstitutionScheduleController.appointments}" var="c" itemValue="#{c.ID}"
+                                   itemLabel="#{c.title}"/>
+                </b:selectOneMenu>
+                <b:selectOneMenu binding="#{inputCourse}"
+                                 value="#{SubstitutionScheduleController.currentSub.courseID}">
+                    <f:selectItem itemLabel="Kein Kurs" itemValue="0"/>
+                    <f:selectItems value="#{SubstitutionScheduleController.courses}" var="c" itemValue="#{c.ID}"
+                                   itemLabel="#{c.name}"/>
+                </b:selectOneMenu>
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" value="Speichern"
+                                     style="margin-top:40px;margin-left:20px"
+                                     onclick="ajax:SubstitutionScheduleController.editCurrentSub()"
+                                     oncomplete="javascript:$('#editSubsitutionModal').modal('hide');return false;"
+                                     update="projects"/>
+                </div>
+            </h:form>
+        </b:modal>
+
+        <b:modal id="addFileModal" title="Datei hochladen" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="add-file-form" enctype="multipart/form-data">
+                <div style="width: 100%" align="center">
+                    <div class="file-upload-wrapper btn btn-danger" style="margin-bottom: 40px !important;">
+                        <span>Upload</span>
+                        <h:inputFile
+                                value="#{SubstitutionScheduleController.uploadFile}"
+                                id="uploadFileField"
+                                styleClass="file-input">
+                            <f:ajax listener="#{SubstitutionScheduleController.uploadFileChanged()}"
+                                    render="urlField"
+                                    event="change"></f:ajax>
+                        </h:inputFile>
+                    </div>
+                </div>
+                <b:inputText placeholder="Url"
+                             binding="#{inputFileUrl}"
+                             value="#{SubstitutionScheduleController.currentUploadUrl}"
+                             id="urlField">
+                </b:inputText>
+            </h:form>
+            <h:form>
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <h:commandButton
+                            onclick="#{SubstitutionScheduleController.addFile(inputFilename.value,inputFileUrl.value)}"
+                            value="Upload"
+                            styleClass="btn btn-danger"
+                            style="margin-top:40px;margin-left:20px" update="projects"
+                            data-dismiss="modal" data-target="#addFileModal"></h:commandButton>
+                </div>
+            </h:form>
+        </b:modal>
+
+
+        <b:container style="overflow:scroll;margin-bottom:80px">
+            <b:row style="margin-bottom:60px">
+                <b:column span="4">
+                    <h:form rendered="#{SubstitutionScheduleController.addSubstitutionVisible()}">
+                        <b:commandButton value="Neu" align="right"
+                                         style="margin-top:15px;margin-right:20px"
+                                         look="danger" iconAwesome="fa-plus"
+                                         onclick="ajax:SubstitutionScheduleController.createCurrentSub()"
+                                         oncomplete="javascript:$('#amodal').modal();return false;">  
+                        </b:commandButton>
+                        <b:commandButton look="danger" value="Import" iconAwesome="fa-upload"
+                                         style="margin-top:15px;"
+                                         onclick="javascript:$('#addFileModal').modal();return false;"
+                                         update="projects"/>
+                    </h:form>
+                </b:column>
+                <b:column span="4">
+                    <h1 align="center">Vertretungen</h1>
+                </b:column>
+                <b:column span="4">
+                    <h:form>
+                        <b:inputText placeholder="Suchen" style="margin-top:15px" binding="#{inputSearch}">
+                            <f:ajax listener="#{SubstitutionScheduleController.onSearch(inputSearch.value)}"
+                                    render="projects"/>
+                        </b:inputText>
+                    </h:form>
+                </b:column>
+            </b:row>
+
+            <h:panelGroup id="projects"> 
+                <ui:repeat value="#{SubstitutionScheduleController.subsitionDays}" var="day">
+                    <h4 class="list-group-title">#{day.date}</h4>
+                    <ul class="list-group list-group-repeat">
+                        <ui:repeat value="#{day.substitutions}" var="sub"> 
+                            <li class="list-group-item list-group-item-repeat"> 
+                                <b:row>
+                                    <b:column span="2" styleClass="course-sub">
+                                        <h4 style="margin-top: 18px">
+                                            #{SubstitutionScheduleController.getCourseByID(sub.courseID).name}
+                                        </h4>
+                                    </b:column>
+                                    <b:column span="7">
+                                        <h5><b>#{sub.title}</b> : <i>#{sub.description}</i></h5>
+
+                                    </b:column>
+                                    <b:column span="3">
+                                        <div style="width: 100%" align="right">
+                                            <h:form>
+                                                <b:commandButton value="Bearbeiten" align="center"
+                                                                 look="danger" iconAwesome="fa-edit"
+                                                                 style="margin-right:10px"
+                                                                 onclick="ajax:SubstitutionScheduleController.setCurrentSub(sub)"
+                                                                 oncomplete="javascript:$('#editSubsitutionModal').modal();return false;"
+                                                                 update="editSubsitutionModal">  
+                                                </b:commandButton>
+
+                                                <b:commandButton value="Loeschen" align="center"
+                                                                 look="danger" iconAwesome="fa-trash"
+                                                                 action="#{SubstitutionScheduleController.deleteSub(sub)}">  
+                                                </b:commandButton>
+                                            </h:form>
+                                        </div>
+                                    </b:column>
+                                </b:row>
+                            </li>
+                              </ui:repeat> 
+                    </ul>
+                </ui:repeat>
+            </h:panelGroup> 
+        </b:container>
+    </ui:define>
+</ui:composition>

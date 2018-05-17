@@ -1,0 +1,206 @@
+<ui:composition template="/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui">
+    <ui:define name="title">hello</ui:define>
+
+    <ui:define name="content">
+
+
+        <b:modal id="newTimetableModal" title="Neuer Stundenplan" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="new-course-modal">
+                <b:inputText placeholder="Titel" binding="#{inputTitle}" required="false"></b:inputText>
+                <!--h:outputLabel value="Von"></h:outputLabel>
+                <b:dateTimePicker placeholder="Von wann" binding="#{inputTimeFrom}" required="false"></b:dateTimePicker>
+                <h:outputLabel value="Von"></h:outputLabel>
+                <b:dateTimePicker placeholder="Bis wann" binding="#{inputTimeTo}" required="false"></b:dateTimePicker>
+                <h:outputLabel value="Wiederholen" style="margin-top: 20px"></h:outputLabel>
+                <b:selectOneMenu value="Wiederholen" id="brandID" binding="#{inputType}">
+                    <f:selectItem itemLabel="Jede Woche" itemValue="1"/>
+                    <f:selectItem itemLabel="Alle 2 Wochen" itemValue="2"/>
+                    <f:selectItem itemLabel="Alle 3 Wochen" itemValue="3"/>
+                    <f:selectItem itemLabel="Alle 4 Wochen" itemValue="4"/>
+                </b:selectOneMenu-->
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" value="Hinzufuegen"
+                                     style="margin-top:40px;margin-left:20px"
+                                     onclick="ajax:TimetableController.addTimetable(inputTitle.value)"
+                                     oncomplete="javascript:$('#newTimetableModal').modal('hide');return false;"
+                                     update="full-container"/>
+                </div>
+            </h:form>
+        </b:modal>
+
+        <b:container align="center" style="overflow:scroll;margin-bottom:80px">
+            <h:panelGroup id="full-container"> 
+                <b:row style="margin-bottom:60px">
+                    <b:column span="4">
+                        <h:form>
+                            <b:commandButton value="Neu" look="danger" style="margin-top:15px;margin-right:10px" iconAwesome="fa-plus"
+                                             onclick="$('#newTimetableModal').modal();return false;">
+                            </b:commandButton>
+                            <b:commandButton value="Löschen" look="danger" style="margin-top:15px" iconAwesome="fa-trash"
+                                      action="#{TimetableController.deleteCurrentTimetable()}" update=":full-container">
+                            </b:commandButton>
+
+                        </h:form>
+                    </b:column>
+                    <b:column span="4">
+                        <h:form id="change-current-timetable">
+                            <h1 align="center">Stundenplan</h1>
+                            <div style="width: 100%" align="center">
+                                <b:commandButton iconAwesome="fa-arrow-left" look="danger"
+                                                 onclick="ajax:TimetableController.previousTimetable()"
+                                                 update=":timetableContainer change-current-timetable"
+                                                 style="margin-right:20px"
+                                                 styleClass="button-prev">
+                                </b:commandButton>
+                                <p style="display:inline;color:#999;margin-right:20px"
+                                   id="timetable-name"> #{TimetableController.getCurrentTimetable().title}</p>
+                                <b:commandButton iconAwesome="fa-arrow-right" look="danger"
+                                                 onclick="ajax:TimetableController.nextTimetable()"
+                                                 update=":timetableContainer change-current-timetable">
+                                </b:commandButton>
+                            </div>
+                        </h:form>
+                    </b:column>
+                    <b:column span="4">
+                        <div style="width: 100%" align="right">
+                            <h:form id="switch-form">
+                                <b:switch onchange="ajax:TimetableController.onEditChanged()"
+                                          label="Bearbeiten" onColor="danger" onText="An"
+                                          offText="Aus" render-label="true"
+                                          update=":timetableContainer"/>
+                            </h:form>
+                        </div>
+                    </b:column>
+                </b:row>
+
+                <h:panelGroup id="timetableContainer">
+                    <h:panelGroup id="timetableContainerView" style="#{TimetableController.getViewStyle()}">
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="timetable">
+                                <thead>
+                                    <tr>
+                                        <th align="center" style="width:50px">Stunde</th>
+                                        <ui:repeat value="#{TimetableController.getCurrentTimetable().days}" var="day">
+                                            <th align="center">#{day.name}</th>
+                                        </ui:repeat>
+                                    </tr>
+                                </thead>
+                                <tr class="row table-responsive-index">
+                                    <td align="center">1</td>
+                                    <td align="center">2</td>
+                                    <td align="center">3</td>
+                                    <td align="center">4</td>
+                                    <td align="center">5</td>
+                                    <td align="center">6</td>
+                                    <td align="center">7</td>
+                                    <td align="center">8</td>
+                                </tr>
+                                <ui:repeat value="#{TimetableController.getCurrentTimetable().days}" var="day">
+                                    <tr class="row">
+                                        <ui:repeat value="#{day.appointments}" var="appointment" varStatus="myVarStatus">
+                                            <td align="center">
+                                                <h:outputLabel value="#{appointment.title}"></h:outputLabel>
+                                            </td>
+                                        </ui:repeat>
+                                    </tr>
+                                </ui:repeat>
+                            </table>
+                        </div>
+                        <script>
+                            //Transponse the Matrix.
+                            $("#timetable").each(function () {
+                                var $this = $(this);
+                                var newrows = [];
+                                $this.find(".row").each(function (data, index) {
+                                    var i = 0;
+                                    $(this).find("td").each(function () {
+                                        i++;
+                                        if (newrows[i] === undefined) {
+                                            newrows[i] = $("<tr></tr>");
+                                        }
+                                        newrows[i].append($(this));
+                                    });
+                                });
+                                $this.find(".row").remove();
+                                $.each(newrows, function () {
+                                    $this.append(this);
+                                });
+                            });
+                        </script>
+                    </h:panelGroup>
+                    <h:panelGroup id="timetableContainerEdit" style="#{TimetableController.getEditStyle()}">
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="timetableEdit">
+                                <thead>
+                                    <tr>
+                                        <th style="width:50px">Stunde </th>
+                                        <ui:repeat value="#{TimetableController.getCurrentTimetable().days}" var="day">
+                                            <th align="center">#{day.name}</th>
+                                        </ui:repeat>
+                                    </tr>
+                                </thead>
+                                <tr class="row table-responsive-index">
+                                    <td align="center">1</td>
+                                    <td align="center">2</td>
+                                    <td align="center">3</td>
+                                    <td align="center">4</td>
+                                    <td align="center">5</td>
+                                    <td align="center">6</td>
+                                    <td align="center">7</td>
+                                    <td align="center">8</td>
+                                </tr>
+                                <ui:repeat value="#{TimetableController.getCurrentTimetable().days}" var="day">
+                                    <tr class="row">
+                                        <ui:repeat value="#{day.appointments}" var="appointment">
+                                            <td align="center">
+                                                <h:form>
+                                                    <b:inputText value="#{appointment.title}"
+                                                                 placeholder="Fach"
+                                                                 binding="#{inputAppointment}">
+                                                        <f:ajax event="blur"
+                                                                listener="#{TimetableController.onEntryChanged(appointment,inputAppointment.value)}"/>
+                                                    </b:inputText>
+                                                </h:form>
+                                            </td>
+                                        </ui:repeat>
+                                    </tr>
+                                </ui:repeat>
+                            </table>
+                        </div>
+                        <script>
+                            //Transponse the Matrix.
+                            $("#timetableEdit").each(function () {
+                                var $this = $(this);
+                                var newrows = [];
+                                $this.find(".row").each(function (data, index) {
+                                    var i = 0;
+                                    $(this).find("td").each(function () {
+                                        i++;
+                                        if (newrows[i] === undefined) {
+                                            newrows[i] = $("<tr></tr>");
+                                        }
+                                        newrows[i].append($(this));
+                                    });
+                                });
+                                $this.find(".row").remove();
+                                $.each(newrows, function () {
+                                    $this.append(this);
+                                });
+                            });
+                        </script>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:panelGroup>
+
+
+        </b:container>
+    </ui:define>
+</ui:composition>

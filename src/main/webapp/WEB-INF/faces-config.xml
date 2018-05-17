@@ -1,0 +1,191 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+    http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+
+    <managed-bean>
+        <description>Holder of all component bindings.</description>
+        <managed-bean-name>MainApplication</managed-bean-name>
+        <managed-bean-class>com.applicationswp.controller.MainApplication</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <description>SchoolrulesController</description>
+        <managed-bean-name>SchoolrulesController</managed-bean-name>
+        <managed-bean-class>com.applicationswp.controller.SchoolrulesController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>mainApplication</property-name>
+            <value>#{MainApplication}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>RegisterController</description>
+        <managed-bean-name>RegisterController</managed-bean-name>
+        <managed-bean-class>com.applicationswp.controller.RegisterController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>mainApplication</property-name>
+            <value>#{MainApplication}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>TeacherList</description>
+        <managed-bean-name>TeacherListController</managed-bean-name>
+        <managed-bean-class>com.applicationswp.controller.TeacherListController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>mainApplication</property-name>
+            <value>#{MainApplication}</value>
+        </managed-property>
+    </managed-bean>
+
+
+    <managed-bean>
+        <description>MessagesController</description>
+        <managed-bean-name>MessagesController</managed-bean-name>
+        <managed-bean-class>com.applicationswp.controller.MessagesController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>mainApplication</property-name>
+            <value>#{MainApplication}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>EvaluationController</description>
+        <managed-bean-name>EvaluationController</managed-bean-name>
+        <managed-bean-class>com.applicationswp.controller.EvaluationController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>mainApplication</property-name>
+            <value>#{MainApplication}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>TaskController</description>
+        <managed-bean-name>TaskController</managed-bean-name>
+        <managed-bean-class>com.applicationswp.controller.TaskController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>mainApplication</property-name>
+            <value>#{MainApplication}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>SubstitutionScheduleController</description>
+        <managed-bean-name>SubstitutionScheduleController</managed-bean-name>
+        <managed-bean-class>com.applicationswp.controller.SubstitutionScheduleController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>mainApplication</property-name>
+            <value>#{MainApplication}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>AppointmentController</description>
+        <managed-bean-name>AppointmentController</managed-bean-name>
+        <managed-bean-class>com.applicationswp.controller.AppointmentController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>mainApplication</property-name>
+            <value>#{MainApplication}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>LoginController</description>
+        <managed-bean-name>LoginController</managed-bean-name>
+        <managed-bean-class>com.applicationswp.controller.LoginController</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+            <property-name>mainApplication</property-name>
+            <value>#{MainApplication}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>CourseViewController</description>
+        <managed-bean-name>CourseViewController</managed-bean-name>
+        <managed-bean-class>com.applicationswp.controller.CourseViewController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>mainApplication</property-name>
+            <value>#{MainApplication}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>CoursesController</description>
+        <managed-bean-name>CoursesController</managed-bean-name>
+        <managed-bean-class>com.applicationswp.controller.CoursesController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>mainApplication</property-name>
+            <value>#{MainApplication}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>TimetableController</description>
+        <managed-bean-name>TimetableController</managed-bean-name>
+        <managed-bean-class>com.applicationswp.controller.TimetableController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>mainApplication</property-name>
+            <value>#{MainApplication}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>AdminController</description>
+        <managed-bean-name>AdminController</managed-bean-name>
+        <managed-bean-class>com.applicationswp.controller.AdminController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>mainApplication</property-name>
+            <value>#{MainApplication}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>DashboardController</description>
+        <managed-bean-name>DashboardController</managed-bean-name>
+        <managed-bean-class>com.applicationswp.controller.DashboardController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>mainApplication</property-name>
+            <value>#{MainApplication}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>ExcuseNoteController</description>
+        <managed-bean-name>ExcuseNoteController</managed-bean-name>
+        <managed-bean-class>com.applicationswp.controller.ExcuseNoteController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>mainApplication</property-name>
+            <value>#{MainApplication}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>ProfileController</description>
+        <managed-bean-name>ProfileController</managed-bean-name>
+        <managed-bean-class>com.applicationswp.controller.ProfileController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>mainApplication</property-name>
+            <value>#{MainApplication}</value>
+        </managed-property>
+    </managed-bean>
+
+</faces-config>

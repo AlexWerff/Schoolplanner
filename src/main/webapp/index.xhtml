@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
+   <h:head>
+      <link type="text/css" rel="stylesheet" href="style/main.css"/>
+      <link type="text/css" rel="stylesheet" href="style/chat.css"/>
+      <link type="text/css" rel="stylesheet" href="style/tree.css"/>
+      <link type="text/css" rel="stylesheet" href="style/font-awesome.css"/>
+      <link type="text/css" rel="stylesheet" href="style/bootstrap.min.css"/>
+   </h:head>
+   <h:body>
+      <h:form>
+      <b:navBar brandImg="img/logo.png" brandImgStyle="max-width:100%;max-height:50px;position:absoulte;" brandHref="landing.xhtml">
+         <b:navbarLinks pull="left">
+            <b:navLink value="Dashboard" href="dashboard.xhtml" iconAwesome="fa-dashboard" rendered="#{LoginController.loggedIn}"></b:navLink>
+            <b:navLink value="Kalender" href="events.xhtml" iconAwesome="fa-calendar" rendered="#{LoginController.loggedIn}"></b:navLink>
+            <b:navLink value="Stundenplan" href="timetable.xhtml" iconAwesome="fa-book" rendered="#{LoginController.loggedIn}"></b:navLink>
+            <b:navLink value="Vertretungsplan" href="substitutionSchedule.xhtml" iconAwesome="fa-briefcase" rendered="#{LoginController.loggedIn}"></b:navLink>
+            <b:navLink value="Kurse" href="courses.xhtml" iconAwesome="fa-graduation-cap" rendered="#{LoginController.loggedIn}"></b:navLink>
+         </b:navbarLinks>
+         <b:navbarLinks pull="right">
+            <b:navLink value="Login" href="login.xhtml" iconAwesome="sign-in" rendered="#{!LoginController.loggedIn}"></b:navLink>
+            <b:dropMenu value="#{LoginController.username}" iconAwesome="fa-user"  rendered="#{LoginController.loggedIn}">
+               <b:navLink value="Profil" href="profile.xhtml" iconAwesome="fa-user"></b:navLink>
+               <b:navLink value="Nachrichten" href="messages.xhtml" iconAwesome="fa-comments"></b:navLink>
+               <b:navLink value="Aufgaben" href="tasks.xhtml" iconAwesome="fa-check"></b:navLink>
+               <b:navLink value="Fehlzeiten" href="excusenotes.xhtml" iconAwesome="medkit"></b:navLink>
+               <b:navLink value="Meine Lehrer" href="teacherlist.xhtml" iconAwesome="fa-graduation-cap"></b:navLink>
+               <b:navLink value="Selbsteinschaetzung" href="evaluation.xhtml" iconAwesome="fa fa-tasks" rendered="#{LoginController.loggedIn}"></b:navLink>
+               <b:navCommandLink value="Logout" iconAwesome="sign-out" action="#{LoginController.logout()}">
+               </b:navCommandLink>
+
+            </b:dropMenu>
+         </b:navbarLinks>
+      </b:navBar>
+      </h:form>
+
+
+      <ui:insert name="content"/>
+
+
+      <b:navBar position="bottom">
+         <b:navbarLinks pull="center">
+            <b:navLink value="Schulwebsite" href="http://www.sz-ronzelen.de" target="_blank" iconAwesome="fa-university"></b:navLink>
+            <b:navLink value="Schulordnung" href="schoolrules.xhtml" iconAwesome="fa-mortar-board"></b:navLink>
+            <b:navLink value="Raumuebersicht" href="roomoverview.xhtml" iconAwesome="fa-map-o"></b:navLink>
+         </b:navbarLinks>
+      </b:navBar>
+   </h:body>
+
+
+</html>
+

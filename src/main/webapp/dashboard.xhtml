@@ -1,0 +1,100 @@
+<ui:composition template="/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui">
+    <ui:define name="title">hello</ui:define>
+
+    <ui:define name="content" style="overflow:scroll;margin-bottom:80px">
+        <b:container>
+            <h1 align="center">Dashboard</h1>
+            <h3 align="center" style="margin-bottom: 60px;color:#999">#{DashboardController.getDate("weekday")} #{DashboardController.getDate("day")} #{DashboardController.getDate("month")} #{DashboardController.getDate("year")}</h3>
+
+            <b:row>
+                <b:column span="6">
+                    <b:panel>
+                        <div class="panel-header">
+                            <a href="messages.xhtml" class="link-color">
+                                <h4>
+                                    <b:iconAwesome name="fa-flag"/> Benachrichtigungen
+                                    <b:label text="#{DashboardController.getMessages().size()}" styleClass="bagde-label"/>
+                                </h4>
+                            </a>
+                        </div>
+                        <div class="panel-content">
+                            <ul class="list-group list-group-panel">
+                                <ui:repeat value="#{DashboardController.getMessages()}" var="message">
+                                    <li class="list-group-item list-group-item-panel">
+                                        <b>#{DashboardController.getMemberForID(message.getSenderID()).getUsername()}</b>: #{message.getMessage()}
+                                    </li>
+                                </ui:repeat>
+                            </ul>
+                        </div>
+                    </b:panel>
+                </b:column>
+                <b:column span="6">
+                    <b:panel>
+                        <div class="panel-header">
+                            <a href="tasks.xhtml"  class="link-color">
+                                <h4>
+                                    <b:iconAwesome name="fa-check"/> Aufgaben
+                                    <b:label text="#{DashboardController.getOpenTasks().size()}" styleClass="bagde-label"/>
+                                </h4>
+                            </a>
+                        </div>
+                        <div class="panel-content">
+                            <ul class="list-group">
+                                <ui:repeat value="#{DashboardController.getOpenTasks()}" var="task">
+                                    <li class="list-group-item list-group-item-panel">
+                                        #{task.title}:  #{task.description}
+                                    </li>
+                                </ui:repeat>
+                            </ul>
+                        </div>
+                    </b:panel>
+                </b:column>
+            </b:row>
+            <b:row>
+                <b:column span="6">
+                    <b:panel>
+                        <div class="panel-header">
+                            <a href="substitutionSchedule.xhtml"  class="link-color">
+                                <h4>
+                                    <b:iconAwesome name="fa-briefcase"/> Vertretungen
+                                    <b:label text="#{DashboardController.substitutions.size()}" styleClass="bagde-label"/>
+                                </h4>
+                            </a>
+                        </div>
+                        <div class="panel-content">
+                            <ul class="list-group">
+                                <ui:repeat value="#{DashboardController.substitutions}" var="sub">
+                                    <li class="list-group-item list-group-item-panel">#{sub.title}:  #{sub.description}</li>
+                                </ui:repeat>
+                            </ul>
+                        </div>
+                    </b:panel>
+                </b:column>
+                <b:column span="6">
+                    <b:panel>
+                        <div class="panel-header">
+                            <a href="events.xhtml"  class="link-color">
+                                <h4>
+                                    <b:iconAwesome name="fa-calendar"/> Termine
+                                    <b:label text="#{DashboardController.appointments.size()}" styleClass="bagde-label"/>
+                                </h4>
+                            </a>
+                        </div>
+                        <div class="panel-content">
+                            <ul class="list-group">
+                                <ui:repeat value="#{DashboardController.appointments}" var="appointment">
+                                    <li class="list-group-item list-group-item-panel">#{appointment.title}:  #{appointment.description}</li>
+                                </ui:repeat>
+                            </ul>
+                        </div>
+                    </b:panel>
+                </b:column>
+            </b:row>
+        </b:container>
+    </ui:define>
+</ui:composition>

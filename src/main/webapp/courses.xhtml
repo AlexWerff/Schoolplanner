@@ -1,0 +1,101 @@
+<ui:composition template="/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="title">Aufgaben</ui:define>
+
+    <ui:define name="content">
+        <b:modal id="newCourseModal" title="Neuer Kurs" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="new-course-modal">
+                <b:inputText placeholder="Titel" binding="#{inputTitle}" required="false"></b:inputText>
+                <b:inputText placeholder="Beschreibung" binding="#{inputDesc}" required="false"></b:inputText>
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" value="Hinzufuegen"
+                                     style="margin-top:40px;margin-left:20px"
+                                     onclick="ajax:CoursesController.addNewCourse(inputTitle.value,inputDesc.value)"
+                                     oncomplete="javascript:$('#newCourseModal').modal('hide');return false;"
+                                     update="courses"  />
+                </div>
+            </h:form>
+        </b:modal>
+
+
+
+        <b:container style="overflow:scroll;margin-bottom:80px">
+            <b:row style="margin-bottom:60px">
+                <b:column span="4">
+                    <b:button value="Neu" look="danger" style="margin-top:15px" iconAwesome="fa-plus"
+                              onclick="$('#newCourseModal').modal();return false;">
+                    </b:button>
+                </b:column>
+                <b:column span="4">
+                    <h1 align="center">Kurse</h1>
+                </b:column>
+                <b:column span="4">
+                    <h:form>
+                        <b:inputText placeholder="Suchen" style="margin-top:15px" binding="#{inputSearch}">
+                            <f:ajax listener="#{CoursesController.onSearch(inputSearch.value)}" render="courses"/>
+                        </b:inputText>
+                    </h:form>
+                </b:column>
+            </b:row>
+
+            <h:panelGroup id="courses"> 
+                <h4 class="list-group-title">
+                    <h:form id="switch-form">
+                        <b:switch onchange="ajax:CoursesController.onShowOwnChanged()"
+                                  label="Anzeigen" onColor="danger" onText="Alle"
+                                  offText="Eigene" render-label="true"
+                                  update="courses"/>
+                    </h:form>
+                </h4>
+                <ul class="list-group list-group-repeat">
+                    <ui:repeat value="#{CoursesController.courses}" var="course"> 
+                        <li class="list-group-item list-group-item-repeat"> 
+                            <b:row>
+                                <a href="courseView.xhtml?courseID=#{course.ID}" class="link">
+                                <b:column span="1" styleClass="course-sub">
+                                    <i class="fa fa-graduation-cap fa-2x"
+                                       style="margin-top: 17px"
+                                       aria-hidden="true"></i>
+                                </b:column>
+                                <b:column span="8">
+
+                                        <h5 style="margin-top: 13px">
+                                            <b>#{course.name}</b> : <i>#{course.description}</i>
+                                            <a href="profile.xhtml?userID=#{CoursesController.getCourseOwner(course).ID}">
+                                                <small> (#{CoursesController.getCourseOwner(course).toNameString()})</small>
+                                            </a>
+                                        </h5>
+
+                                </b:column>
+                                <b:column span="1">
+                                    <p style="margin-top: 12px;color:rgba(181,21,43,0.8);" align="right">
+                                    #{course.members.size()} <i class="fa fa-users fa-lg" aria-hidden="true"></i>
+                                    </p>
+                                </b:column>
+                                <b:column span="1">
+                                    <p style="margin-top: 12px;color:rgba(181,21,43,0.8);" align="right">
+                                        #{course.files.size()} <i class="fa fa-files-o fa-lg" aria-hidden="true"></i>
+                                    </p>
+                                </b:column>
+                                <b:column span="1">
+                                    <p style="margin-top: 12px;color:rgba(181,21,43,0.8);" align="right">
+                                        #{course.events.size()} <i class="fa fa-calendar fa-lg" aria-hidden="true"></i>
+                                    </p>
+                                </b:column>
+                                </a>
+                            </b:row>
+                        </li>
+                    </ui:repeat> 
+                </ul>
+            </h:panelGroup> 
+        </b:container>
+    </ui:define>
+</ui:composition>

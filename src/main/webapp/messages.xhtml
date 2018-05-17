@@ -1,0 +1,93 @@
+<ui:composition template="/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="title">hello</ui:define>
+
+    <ui:define name="content">
+        <b:container style="margin-bottom:20px">
+            <h1 align="center" style="margin-bottom: 20px">Nachrichten</h1>
+
+            <div style="width:100%" align="center">
+                <div class="chat-window">
+                    <div class="col-lg-4 chat-contacts">
+                        <div class="chat-contacts-header">
+                            <h:form>
+                                <b:inputText placeholder="Suchen" styleClass="chat-contact-search"
+                                             binding="#{inputSearch}">
+                                    <f:ajax listener="#{MessagesController.onSearch(inputSearch.value)}"
+                                            render="chat-contacts"/>
+                                </b:inputText>
+                            </h:form>
+                        </div>
+                        <h:panelGroup id="chat-contacts">
+                            <ul class="chat-contact-list">
+                                <h:form>
+                                    <ui:repeat value="#{MessagesController.members}" var="member">
+                                        <div class="chat-contact-delimter"></div>
+                                        <h:commandLink styleClass="link"
+                                                       action="#{MessagesController.setCurrentChatMember(member)}">
+                                            <li class="#{MessagesController.getCurrentChatStyle(member)}">
+
+
+                                                <img src="#{member.imageUrl}"/>
+                                                <h4>#{member.firstname} #{member.lastname}</h4>
+                                                <p>#{MessagesController.getLastChatMessage(member).message}</p>
+
+
+                                            </li>
+                                        </h:commandLink>
+                                    </ui:repeat>
+                                </h:form>
+                                <div class="chat-contact-delimter"></div>
+                            </ul>
+                        </h:panelGroup>
+                    </div>
+
+                    <div class="col-lg-8 chat-messages">
+                        <h:panelGroup id="chat">
+                            <div class="chat-messages-header">
+                                <a href="profile.xhtml?userID=#{MessagesController.getCurrentMemberID()}" class="link-color
+
+                                ">
+                                    <h4>#{MessagesController.getCurrentChatName()}</h4>
+                                </a>
+                            </div>
+                            <div class="commentArea" id="chat-messages-area">
+                                <ui:repeat value="#{MessagesController.getCurrentMessages()}" var="message">
+                                    <div class="#{MessagesController.getMessageOrientation(message)}">
+                                        #{message.message}
+                                    </div>
+                                </ui:repeat>
+                            </div>
+                            <div class="chat-input-content">
+                                <h:form>
+                                    <b:inputText placeholder="Text eingeben" styleClass="chat-input-input"
+                                                 binding="#{chatInput}">
+                                        <f:facet name="append">
+                                            <b:commandButton value="Senden"
+                                                             styleClass="chat-button-send"
+                                                             action="#{MessagesController.addMessage(chatInput)}"
+                                                             update="chat">
+
+                                            </b:commandButton>
+                                        </f:facet>
+                                    </b:inputText>
+                                </h:form>
+                            </div>
+                            <script>
+                                var objDiv = document.getElementById("chat-messages-area");
+                                objDiv.scrollTop = objDiv.scrollHeight;
+                            </script>
+                        </h:panelGroup>
+                    </div>
+
+                </div>
+            </div>
+
+        </b:container>
+    </ui:define>
+</ui:composition>

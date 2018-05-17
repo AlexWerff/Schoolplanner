@@ -1,0 +1,169 @@
+<ui:composition template="/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="title">Edit Evaluation</ui:define>
+
+    <ui:define name="content">
+
+        <b:modal id="modifie" title="Neue Einschätzungspunkt" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <b:form>
+                <b:column  span="15">
+                    <b:row style="margin-top:30px">
+                        <b:column span="12">
+                            <h:outputText value="Titel :"></h:outputText>
+                            <b:inputText binding="#{titel}" required="false" ></b:inputText>
+                        </b:column>
+                    </b:row>
+                </b:column>
+                <b:column  span="15">
+                    <b:row style="margin-top:30px">
+                        <b:column span="12">
+                            <h:outputText value="Frage 1 :"></h:outputText>
+                            <b:inputText  binding="#{question1}" required="false" ></b:inputText>
+                        </b:column>
+                    </b:row>
+                </b:column>
+                <b:column span="15">
+                    <b:row style="margin-top:30px">
+                        <b:column span="12">
+                            <h:outputText value="Frage 2 :"></h:outputText>
+                            <b:inputText binding="#{question2}" required="false" ></b:inputText>
+                        </b:column>
+                    </b:row>
+                </b:column>
+                <b:column  span="15">
+                    <b:row style="margin-top:30px">
+                        <b:column span="12">
+                            <h:outputText value="Frage 3 :"></h:outputText>
+                            <b:inputText binding="#{question3}" required="false" ></b:inputText>
+                        </b:column>
+                    </b:row>
+                </b:column>
+                <b:column span="15">
+                    <b:row style="margin-top:30px">
+                        <b:column span="12">
+                            <h:outputText value="Frage 4 :"></h:outputText>
+                            <b:inputText binding="#{question4}" required="false" ></b:inputText>
+                        </b:column>
+                    </b:row>
+                </b:column>
+                <b:column  span="15">
+                    <b:row style="margin-top:30px">
+                        <b:column span="12">
+                            <h:outputText value="Frage 5 :"></h:outputText>
+                            <b:inputText binding="#{question5}" required="false" ></b:inputText>
+                        </b:column>
+                    </b:row>
+                </b:column>
+                <b:column span="15">
+                    <b:row style="margin-top:30px">
+                        <b:column span="12">
+                            <h:outputText value="Frage 6 :"></h:outputText>
+                            <b:inputText binding="#{question6}" required="false" ></b:inputText>
+                        </b:column>
+                    </b:row>
+                </b:column>
+                <b:column  span="15">
+                    <b:row style="margin-top:30px">
+                        <b:column span="12">
+                            <h:outputText value="Frage 7 :"></h:outputText>
+                            <b:inputText binding="#{question7}" required="false" ></b:inputText>
+                        </b:column>
+                    </b:row>
+                </b:column>
+                <b:column span="15">
+                    <b:row style="margin-top:30px">
+                        <b:column span="12">
+                            <h:outputText value="Frage 8 :"></h:outputText>
+                            <b:inputText binding="#{question8}" required="false" ></b:inputText>
+                        </b:column>
+                    </b:row>
+                </b:column>
+                <b:column  span="15">
+                    <b:row style="margin-top:30px">
+                        <b:column span="12">
+                            <h:outputText value="Frage 9 :"></h:outputText>
+                            <b:inputText  binding="#{question9}" required="false" ></b:inputText>
+                        </b:column>
+                    </b:row>
+                </b:column>
+                <b:column span="15">
+                    <b:row style="margin-top:30px">
+                        <b:column span="12">
+                            <h:outputText value="Frage 10 :"></h:outputText>
+                            <b:inputText binding="#{question10}" required="false" ></b:inputText>
+                        </b:column>
+                    </b:row>
+                </b:column>
+
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" value="Hinzufuegen"
+                                     style="margin-top:40px;margin-left:20px"
+                                     onclick ="ajax:EvaluationController.fillQuestionList(titel.value , question1.value , question2.value , question3.value ,question4.value,question5.value,question6.value,question7.value,question8.value,question9.value,question10.value)"
+                                     oncomplete ="javascript:$('#modifie').modal('hide');return false;"
+                                     update="projects"/>
+                </div>
+            </b:form>
+        </b:modal>
+
+        <b:modal id="delete" title="Wirklich loeschen?" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="delete-task-form">
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" iconAwesome="fa-trash" value="Loeschen"
+                                     style="margin-top:40px;margin-left:20px"
+                                     action="#{EvaluationController.deleteLehr()}"
+                                     oncomplete="javascript:$('#delete').modal('hide');return false;"
+                                     update="projects"/>
+                </div>
+            </h:form>
+        </b:modal>
+
+        <b:container style="overflow:scroll;margin-bottom:80px">
+            <b:row style="margin-bottom:60px">
+                <b:column span="4">
+                    <b:button value="Neu" look="danger" style="margin-top:15px" iconAwesome="fa-plus"
+                              onclick="javascript:$('#modifie').modal();return false;">
+                    </b:button>
+                </b:column>
+                <b:column span="4">
+                    <h1 align="center">Selbsteinschätzung editieren</h1>
+                </b:column>
+                <div  align="right">
+                    <h:form>
+                        <b:commandButton value="Alles löschen" align="center"
+                                         look="info" iconAwesome="fa-trash"
+                                         onclick="javascript:$('#delete').modal();return false;">
+                        </b:commandButton>
+                    </h:form>
+                </div>
+            </b:row>
+
+            <h:panelGroup id="projects"> 
+                <ui:repeat value="#{EvaluationController.getTitelsAsList(EvaluationController.getLehrEvaluation().getTitels())}" var="evalu"> 
+                    <ul class="list-group list-group-repeat">
+                        <li class="list-group-item list-group-item-repeat"> 
+                            <b:row>
+                                <b:column span="7" styleClass="course-sub">
+                                    <h4 style="margin-top: 18px">#{evalu}</h4>
+                                </b:column>
+                                <b:column span="3">
+                                </b:column>
+                            </b:row>
+                        </li>
+                    </ul>
+                </ui:repeat> 
+            </h:panelGroup> 
+        </b:container>
+
+    </ui:define>
+</ui:composition>

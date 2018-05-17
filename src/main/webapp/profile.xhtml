@@ -1,0 +1,301 @@
+<ui:composition template="/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="title">hello</ui:define>
+
+    <ui:define name="content">
+
+
+        <b:modal id="edit-info" title="Profil bearbeiten" styleClass="modalPseudoClass">
+
+            <b:tabView>
+                <b:tab title="Allgemein">
+                    <f:facet name="anchor"><b:iconAwesome name="fa-user"/></f:facet>
+                    <h:form id="edit-info-form">
+                        <b:row style="margin-top:20px;margin-bottom:0px">
+                            <b:column span="6">
+                                <b>Vorname</b><b:inputText placeholder="Vorname" binding="#{inputFirstName}"
+                                                           value="#{ProfileController.thisMember.firstname}"></b:inputText>
+                            </b:column>
+                            <b:column span="6">
+                                <b>Nachname</b><b:inputText placeholder="Nachname" binding="#{inputLastName}"
+                                                            value="#{ProfileController.thisMember.lastname}"></b:inputText>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column span="12">
+                                <b>Spitzname</b><b:inputText placeholder="Spitzname" binding="#{inputNickName}"
+                                                             value="#{ProfileController.thisMember.nickname}"></b:inputText>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column span="12">
+                                <b>Klasse</b><b:inputText placeholder="Klasse" binding="#{inputGrade}"
+                                                          value="#{ProfileController.thisMember.grade}"></b:inputText>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column span="6">
+                                <b>Alter</b><b:inputText placeholder="Alter" binding="#{inputAge}"
+                                                         value="#{ProfileController.thisMember.age}"></b:inputText>
+                            </b:column>
+                            <b:column span="6">
+                                <b>Geburtstag</b><b:dateTimePicker showTime="false" placeholder="Geburtstag"
+                                                                   binding="#{inputBirthday}"
+                                                                   value="#{ProfileController.thisMember.birthday}"
+                                                                   required="false"/>
+                            </b:column>
+                        </b:row>
+                    </h:form>
+                </b:tab>
+                <b:tab title="Kontakt">
+                    <f:facet name="anchor"><b:iconAwesome name="fa-phone"/></f:facet>
+                    <h:form>
+                        <b:row style="margin-top:20px;margin-bottom:0px">
+                            <b:column>
+                                <b>E-Mail</b><b:inputText placeholder="E-Mail" binding="#{inputEmail}"
+                                                          value="#{ProfileController.thisMember.email}"></b:inputText>
+                                <b>Telefon</b><b:inputText placeholder="Telefon" binding="#{inputPhone}"
+                                                           value="#{ProfileController.thisMember.phoneNumber}"></b:inputText>
+                            </b:column>
+                        </b:row>
+                    </h:form>
+                </b:tab>
+                <b:tab title="Sonstiges">
+                    <f:facet name="anchor"><b:iconAwesome name="fa-question-circle"/></f:facet>
+                    <h:form>
+                        <b:row style="margin-top:20px;margin-bottom:0px">
+                            <b:column>
+                                <b>Hobbies</b><b:inputText placeholder="Hobbies"
+                                                           value="#{ProfileController.thisMember.hobbies}"></b:inputText>
+                            </b:column>
+                        </b:row>
+                    </h:form>
+
+
+                    <b:row>
+                        <h:form id="add-file-form" enctype="multipart/form-data">
+                            <div style="width: 100%" align="center">
+                                <h4>Foto hochladen</h4>
+                                <div class="file-upload-wrapper btn btn-danger" style="margin-bottom: 40px !important;">
+                                    <span>Select</span>
+                                    <h:inputFile
+                                            value="#{SubstitutionScheduleController.uploadFile}"
+                                            id="uploadFileField"
+                                            styleClass="file-input">
+                                        <f:ajax listener="#{SubstitutionScheduleController.uploadFileChanged()}"
+                                                render="urlField"
+                                                event="change"></f:ajax>
+                                    </h:inputFile>
+                                </div>
+                                <h:commandButton onclick="#{ProfileController.uploadPicture()}"
+                                                 value="Upload"
+                                                 styleClass="btn btn-danger"
+                                                 style="margin-top:40px;margin-left:20px"></h:commandButton>
+                            </div>
+                        </h:form>
+                        <h:form>
+
+                        </h:form>
+                    </b:row>
+
+
+                </b:tab>
+                <b:tab title="Privatsphaere">
+                    <f:facet name="anchor"><b:iconAwesome name="fa-eye"/></f:facet>
+                    <h:form>
+                        <b:row style="margin-top:10px;margin-bottom:0px">
+                            <b:column>
+                                <b:commandButton value="Spitzname " iconAlign="right"
+                                                 iconAwesome="#{ProfileController.nicknamePublicIcon()}" look="danger"
+                                                 action="#{ProfileController.nicknameSwitchPublic()}"></b:commandButton>
+                            </b:column>
+                        </b:row>
+                        <b:row style="margin-top:10px;margin-bottom:0px">
+                            <b:column>
+                                <b:commandButton value="Alter " iconAlign="right"
+                                                 iconAwesome="#{ProfileController.agePublicIcon()}" look="danger"
+                                                 action="#{ProfileController.ageSwitchPublic()}"></b:commandButton>
+                            </b:column>
+                        </b:row>
+                        <b:row style="margin-top:10px;margin-bottom:0px">
+                            <b:column>
+                                <b:commandButton value="Geburtstag " iconAlign="right"
+                                                 iconAwesome="#{ProfileController.birthdayPublicIcon()}" look="danger"
+                                                 action="#{ProfileController.birthdaySwitchPublic()}"></b:commandButton>
+                            </b:column>
+                        </b:row>
+                        <b:row style="margin-top:10px;margin-bottom:0px">
+                            <b:column>
+                                <b:commandButton value="Telefon " iconAlign="right"
+                                                 iconAwesome="#{ProfileController.phonePublicIcon()}" look="danger"
+                                                 action="#{ProfileController.phoneSwitchPublic()}"></b:commandButton>
+                            </b:column>
+                        </b:row>
+                        <b:row style="margin-top:10px;margin-bottom:0px">
+                            <b:column>
+                                <b:commandButton value="E-Mail " iconAlign="right"
+                                                 iconAwesome="#{ProfileController.emailPublicIcon()}" look="danger"
+                                                 action="#{ProfileController.emailSwitchPublic()}"></b:commandButton>
+                            </b:column>
+                        </b:row>
+                        <b:row style="margin-top:10px;margin-bottom:0px">
+                            <b:column>
+                                <b:commandButton value="Hobbies " iconAlign="right"
+                                                 iconAwesome="#{ProfileController.hobbiesPublicIcon()}" look="danger"
+                                                 action="#{ProfileController.hobbiesSwitchPublic()}"></b:commandButton>
+                            </b:column>
+                        </b:row>
+                    </h:form>
+                </b:tab>
+                <b:tab title="Optionen">
+                    <f:facet name="anchor"><b:iconAwesome name="fa-cog"/></f:facet>
+                    <b:row style="margin-top:20px;margin-bottom:0px">
+                        <b:column span="12">
+                            <b>Altes Passwort</b><b:inputText placeholder="Altes Passwort"
+                                                              binding="#{inputOldPassword}"></b:inputText>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column span="6">
+                            <b>Neues Passwort</b><b:inputText placeholder="Neues Passwort"
+                                                              binding="#{inputNewPassword}"></b:inputText>
+                        </b:column>
+                        <b:column span="6">
+                            <b>Passwort wiederholen</b><b:inputText placeholder="Passwort wiederholen"
+                                                                    binding="#{inputNewPasswordRep}"></b:inputText>
+                        </b:column>
+                    </b:row>
+                </b:tab>
+            </b:tabView>
+            <h:form>
+                <div align="right">
+                    <b:button value="Abbrechen" style="margin-top:40px" dismiss="modal" onclick="return false;"/>
+                    <b:commandButton value="Speichern" style="margin-top:40px;margin-left:20px"
+                                     onclick="ajax:ProfileController.editProfile(ProfileController.thisMember)"
+                                     look="danger" oncomplete="javascript:$('#edit-info').modal('hide');return false;"
+                                     update="profile"
+                    />
+                </div>
+            </h:form>
+        </b:modal>
+
+
+        <b:container id="profile" style="overflow:scroll;margin-bottom:80px">
+            <b:row>
+                <b:column span="4">
+                    <b:button onclick="$('#edit-info').modal();return false;" value="Bearbeiten" iconAwesome="fa-pencil"
+                              iconAlign="center" look="danger" rendered="#{ProfileController.canEdit()}"></b:button>
+                </b:column>
+                <b:column span="4" style="margin-bottom:20px">
+                    <h2 align="center">Profil</h2>
+                </b:column>
+                <b:column span="4" style="margin-bottom:40px">
+
+                </b:column>
+            </b:row>
+            <b:row>
+                <div style="width:100%" align="center">
+                    <b:image value="#{ProfileController.thisMember.imageUrl}" styleClass="profile-image"></b:image>
+                    <h4 style="color:#666666">
+                        #{ProfileController.thisMember.firstname} #{ProfileController.thisMember.lastname}
+                    </h4>
+                    <h5 style="color:#666666">
+                        #{ProfileController.thisMember.nickname}
+                    </h5>
+                </div>
+            </b:row>
+            <b:tabView>
+                <b:tab title="Allgemeines">
+                    <f:facet name="anchor"><b:iconAwesome name="fa-user"/></f:facet>
+                    <ul class="list-group list-group-profile">
+                        <li class="list-group-item list-group-item-profile">
+                            <b:row rendered="#{ProfileController.nicknameIsPublic()}">
+                                <b:column span="2">
+                                    <h5>Spitzname: </h5>
+                                </b:column>
+                                <b:column span="2">
+                                    <h5>#{ProfileController.thisMember.nickname}</h5>
+                                </b:column>
+                            </b:row>
+                        </li>
+                        <li class="list-group-item list-group-item-profile">
+                            <b:row rendered="#{ProfileController.ageIsPublic()}">
+                                <b:column span="2">
+                                    <h5>Alter: </h5>
+                                </b:column>
+                                <b:column span="2">
+                                    <h5>#{ProfileController.thisMember.age}</h5>
+                                </b:column>
+                            </b:row>
+                        </li>
+                        <li class="list-group-item list-group-item-profile">
+                            <b:row rendered="#{ProfileController.birthdayIsPublic()}">
+                                <b:column span="2">
+                                    <h5>Geburtstag: </h5>
+                                </b:column>
+                                <b:column span="2">
+                                    <h5><!--#{ProfileController.thisMember.birthday}-->13.10.1995</h5>
+                                </b:column>
+                            </b:row>
+                        </li>
+                        <li class="list-group-item list-group-item-profile">
+                            <b:row>
+                                <b:column span="2">
+                                    <h5>Klasse: </h5>
+                                </b:column>
+                                <b:column span="2">
+                                    <h5>#{ProfileController.thisMember.grade}</h5>
+                                </b:column>
+                            </b:row>
+                        </li>
+                    </ul>
+                </b:tab>
+                <b:tab title="Kontakt">
+                    <f:facet name="anchor"><b:iconAwesome name="fa-id-card"/></f:facet>
+                    <ul class="list-group list-group-profile">
+                        <li class="list-group-item list-group-item-profil">
+                            <b:row rendered="#{ProfileController.emailIsPublic()}">
+                                <b:column span="2">
+                                    <h5>E-Mail: </h5>
+                                </b:column>
+                                <b:column span="2">
+                                    <h5>#{ProfileController.thisMember.email}</h5>
+                                </b:column>
+                            </b:row>
+                        </li>
+                        <li class="list-group-item list-group-item-profil">
+                            <b:row rendered="#{ProfileController.phoneIsPublic()}">
+                                <b:column span="2">
+                                    <h5>Telefon: </h5>
+                                </b:column>
+                                <b:column span="2">
+                                    <h5>#{ProfileController.thisMember.phoneNumber}</h5>
+                                </b:column>
+                            </b:row>
+                        </li>
+                    </ul>
+                </b:tab>
+                <b:tab title="Sonstiges">
+                    <f:facet name="anchor"><b:iconAwesome name="fa-question-circle"/></f:facet>
+                    <ul class="list-group list-group-profile">
+                        <li class="list-group-item list-group-item-profil">
+                            <b:row rendered="#{ProfileController.hobbiesIsPublic()}">
+                                <b:column span="2">
+                                    <h5>Hobbies: </h5>
+                                </b:column>
+                                <b:column span="2">
+                                    <h5>#{ProfileController.thisMember.hobbies}</h5>
+                                </b:column>
+                            </b:row>
+                        </li>
+                    </ul>
+                </b:tab>
+            </b:tabView>
+        </b:container>
+    </ui:define>
+</ui:composition>

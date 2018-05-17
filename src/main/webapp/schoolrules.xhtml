@@ -1,0 +1,242 @@
+<ui:composition template="/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui"
+>
+    <ui:define name="title">hello</ui:define>
+
+    <ui:define name="content">
+            <h1 align="center" style="margin-bottom: 20px">Schulordnung</h1>
+            <h:form>
+                <style>
+                    div.scroll {
+                        position: relative;
+                        height:100vh;
+                        overflow:scroll;
+                        width: 98%;
+                        margin-bottom: 100px;
+                    }
+                </style>
+                <b:growl id="growlMsg" globalOnly="true" placement-from="bottom" showDetail="false" showSummary="true" allowDismiss="true" delay="10000" escape="true" />
+                <b:navBar id="nb" styleClass="transparent-navbar">
+                    <b:navbarLinks pull="left">
+                        <b:navLink value="Schulregeln" href="#section1" styleClass="transparent-navlink"></b:navLink>
+                        <b:navLink value="Hausordnung" href="#section2" styleClass="transparent-navlink"></b:navLink>
+                        <b:navLink value="Mensaregeln" href="#section3" styleClass="transparent-navlink"></b:navLink>
+                    </b:navbarLinks>
+                </b:navBar>
+
+                <b:container id="scrollable" styleClass="scroll">
+                    <div id="section1" class="container-fluid">
+                        <h1>Schulregeln</h1>
+                        <p class="schoolrules-style">Vom Umgang mit dem Gebaeude</p>
+                        <ul>
+                            <li>
+                                Wir halten alle Raeume, Flure, WCs, den Schulhof und anliegende Grundstuecke sauber.
+                                Wir sind verantwortlich fuer die Erhaltung der Schulgebaeude, der Unterrichtsmaterialien und Einrichtungsgegenstaende.
+                            </li>
+                        </ul>
+                        <p class="schoolrules-style">Vom Umgang miteinander</p>
+                        <ul>
+                            <li>
+                                Wir loesen Konflikte gewaltfrei und Probleme miteinander im persoenlichen Gespraech oder mit dem Konfliktmanagement (s. S. 125). Wir respektieren die Grenzen der Anderen, sind achtsam und freundlich.
+                                Wir ueben konstruktive Kritik aus.
+                            </li>
+                        </ul>
+                        <p class="schoolrules-style">Vom Umgang beim lernen</p>
+                        <ul>
+                            <li>
+                                Wir haben alle das Recht auf einen ungestoerten Aufenthalt und Unterricht am Lernort Schule.
+                                In der Schule fragen wir andere freundlich, wenn wir etwas benoetigen und geben ausgeliehenes Material unversehrt zurueck.
+                            </li>
+                        </ul>
+                        <p class="schoolrules-style">Gueltigkeit</p>
+                        <ul>
+                            <li>
+                                Dieses Regelwerk gilt sowohl fuer alle Schuelerinnen und Schueler, als auch fuer alle Lehrerinnen und Lehrer und fuer das nicht-unterrichtende Personal.
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="section2" class="container-fluid">
+                        <h1>Hausordnung</h1>
+                        <p class="schoolrules-style">
+
+                            Die Hausordnung gilt auf dem gesamten Schulgelaende. Das Schulgelaende umfasst das Hauptgebaeude,
+                            das Nebengebaeude, die Turnhalle, den Schulhof, den Parkplatz, den Bereich zwischen
+                            Parkplatz, Nebengebaeude und Schulhof einschließlich der sich dort befindenden Fahrradstaendern
+                            und der Fahrradstaender am Haupteingang bis zum Eingang des Rhododendronparks.
+
+                        </p>
+
+
+
+                        <ul class="schoolrules-list">
+
+
+                            <li>
+
+                                Das Mitbringen von Waffen und waffenaehnlichen Gegenstaenden jeder Art ist verboten.
+
+                            </li>
+                            <li>
+
+                                Rauchen auf dem Schulgelaende ist gesetzlich verboten.
+
+                            </li>
+                            <li>
+
+                                Schueler/-innen der SEK 1 bleiben waehrend des gesamten Schultages auf dem Schulgelaende.
+
+                            </li>
+                            <li>
+
+                                vgl. Schulregel 2: Niemand wird mit Worten und /oder Taten verletzt.
+
+                            </li>
+                            <li>
+
+                                vgl. Schulregel 1: Gebaeude, Moebel und Materialien werden sauber gehalten, nicht beschmiert
+                                oder beschaedigt.
+
+                            </li>
+                            <li>
+
+                                Kaugummi wird in der Schule nicht gekaut.
+
+                            </li>
+                            <li>
+
+                                Smartphones/elektronische Geraete werden waehrend des gesamten Schultages auf dem
+                                Schulgelaende nicht benutzt. [Ausnahmen und Weiteres siehe *: Handyregel vom 10.02.2014.]
+
+                            </li>
+                            <li>
+
+                                Kopfbedeckungen, dicke Schals und Jacken/Maentel werden vor dem Unterricht abgesetzt /
+                                ausgezogen.
+
+                            </li>
+                        </ul>
+
+                        <p class="schoolrules-style">
+                            * [gekuerzte Ergaenzungen aus der Handyregel vom 10.02.2014:
+                            „… Sollten sie benutzt werden, werden sie von der aufsichtsfuehrenden Lehrkraft eingezogen und namentlich gekennzeichnet im Sekretariat
+                            hinterlegt und am Ende des Schultages des jeweiligen Schuelers / der Schuelerin wieder ausgegeben. Sollten Schueler/-innen
+                            mehrfach aufgefallen sein, fuehrt die Schulleitung ein normverdeutlichendes Gespraech und informiert die Eltern.
+                            Ausnahmen: Oberstufenschuelern und 10.-Klaesslern wird genehmigt, im Atrium Smartphones zu benutzen, Oberstufenschuelern
+                            zusaetzlich auch in der Aula. Der Gebrauch im Unterricht, der durch Lehrkraefte genehmigt wurde, ist zulaessig.]
+
+
+                            Wer gegen die Hausordnung verstoeßt, wird mit Ordnungsmaßnahmen
+                            nach dem Schulrecht belangt.
+                        </p>
+                    </div>
+                    <div id="section3" class="container-fluid">
+                        <h1>Mensaregeln</h1>
+                        <p class="schoolrules-style">
+                            Sauberkeit, Ruecksichtnahme und Hoeflichkeit sind auch in der Mensa die Eckpfeiler unseres Miteinanders. Damit sich alle beim Essen wohlfuehlen koennen, beachten wir im gegenseitigen Respekt folgende Regeln:
+                        </p>
+                        <p class="schoolrules-style">
+                            Wir nehmen Ruecksicht aufeinander.
+                        </p>
+                        <ul>
+                            <li>
+                                Wir betreten ruhig die Mensa und stellen uns hintereinander am Einlass und
+                                der Essensausgabe an.
+                            </li>
+                            <li>
+                                Wir draengeln nicht an der Essensausgabe und lassen niemanden vor.
+                            </li>
+                            <li>
+                                Wir schreien und rennen nicht.
+                            </li>
+                        </ul>
+                        <p class="schoolrules-style">
+                            Wir gehen ruhig und freundlich miteinander um.
+                        </p>
+                        <ul>
+                            <li>
+                                Wir sind hoeflich und freundlich gegenueber den Mitarbeitern der Kueche.
+                            </li>
+                            <li>
+                                Wir meckern nicht, wenn das Essen unseren Geschmack mal nicht trifft.
+                            </li>
+                            <li>
+                                Wir unterhalten uns in Tischlautstaerke.
+                            </li>
+                        </ul>
+                        <p class="schoolrules-style">
+                            Wir essen ordentlich und hinterlassen den Tisch sauber.
+                        </p>
+                        <ul>
+                            <li>
+                                Freie Plaetze koennen von jedem belegt werden.
+                            </li>
+                            <li>
+                                Wir gehen sorgsam mit dem Essen um und vermeiden unnoetige Reste.
+                            </li>
+                            <li>
+                                Wir essen in Ruhe und veranstalten kein Wettessen.
+                            </li>
+                            <li>
+                                Zum Essen benutzen wir das dazugehoerige Besteck.
+                            </li>
+                            <li>
+                                Mit Essen und Trinken wird nicht gespielt, das Inventar bleibt in der Mensa.
+                            </li>
+                            <li>
+                                Wir verlassen unseren Platz sauber und ohne Essensreste. Wischtuecher
+                                liegen beim Mensapersonal bereit.
+                            </li>
+                            <li>
+                                Wir tragen das Tablett selbst an die Rueckgabestelle und entsorgen Besteck, Geschirr
+                                und Essensreste in die dafuer vorgesehenen Behaelter.
+                            </li>
+                        </ul>
+                        <p class="schoolrules-style">
+                            Die Mitarbeiter der Kueche haben ein offenes Ohr.
+                        </p>
+                        <ul>
+                            <li>
+                                Du kannst eine kleine Portion probieren, wenn Du nicht sicher bist, ob du das Essen magst.
+                            </li>
+                            <li>
+                                Wenn Du einen Wunsch hast, sage es offen, auch Anregungen nehmen wir gern entgegen.
+                            </li>
+                            <li>
+                                Die Kueche bemueht sich, allen ein abwechslungsreiches, ausgewogenes und dabei
+                                kostenguenstiges Essen anzubieten.
+                            </li>
+                            <li>
+                                Auch wenn dein Lieblingsessen einmal nicht dabei ist, haben abwertende Kommentare
+                                in der Mensa nichts zu suchen.
+                            </li>
+                        </ul>
+                        <p class="schoolrules-style">
+                            Grundsaetzlich muessen die Anweisungen aller Erwachsenen befolgt werden.
+                        </p>
+                        <ul>
+                            <li>
+                                aeltere Schueler sollen Vorbild sein und auch Aufsichtsaufgaben wahrnehmen, indem sie
+                                juengere Schueler zur Einhaltung der Regeln ermutigen.
+                            </li>
+                            <li>
+                                In der Mensa gelten die Hausordnung sowie die Schulregeln.
+                            </li>
+                            <li>
+                                Bei Zuwiderhandlungen ist mit Ausschluss zu rechnen.
+                            </li>
+                        </ul>
+                        <p class="schoolrules-style">
+                            Abschließend noch ein Appell an alle Essensgaeste:
+                            Helft bitte alle gemeinsam mit, damit nicht so viel Essen entsorgt wird. Nehmt euch Probierportionen! Damit wird unsere Umwelt geschont, die Kosten steigen nicht unnoetig, Muell wird vermieden und alle Gaeste, die zu einer spaeteren Schicht eingeteilt sind, bekommen auch noch ihre Portionen.
+                        </p>
+                        <p class="schoolrules-style">Die Schulleitung und das Mensateam</p>
+                    </div>
+                </b:container>
+                <b:scrollSpy container="scrollable" target="nb" smooth="true"/>
+            </h:form>
+    </ui:define>
+</ui:composition>

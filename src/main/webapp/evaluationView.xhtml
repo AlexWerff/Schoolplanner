@@ -1,0 +1,51 @@
+<ui:composition template="/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="title">Aufgaben</ui:define>
+
+    <ui:define name="content">
+        <b:container style="overflow:scroll;margin-bottom:80px">
+            <b:row style="margin-bottom:60px">
+                <b:column span="4">
+                    <h:form>
+                        <b:commandButton value="Zurück" look="danger" style="margin-top:15px" iconAwesome="fa-plus">
+                        </b:commandButton>
+                        <b:button value="Drücken" look="danger" style="margin-top:15px" iconAwesome="fa-plus"
+                                  onclick="window.print();">
+                        </b:button>
+                    </h:form>
+                </b:column>
+                <b:column span="4">
+                    <h1 align="center">Selbsteinschaetzung</h1>
+                </b:column>
+            </b:row>
+
+            <h:panelGroup id="projects"> 
+                <ul class="list-group list-group-repeat">
+                    <li class="list-group-item list-group-item-repeat"> 
+                        <ui:repeat value="#{EvaluationController.getTitelsAsList(EvaluationController.actuelEvaluation.getTitels())}" var="img">
+                            <ui:repeat value="#{EvaluationController.getQuestionsTitelFromActuel(img)}" var="o">
+                                <b:column span="9">
+                                    <h:outputLabel value="#{img}"/>
+                                </b:column>
+                                <b:row style="margin-top:30px">
+                                    <b:column span="9">
+                                        <h:outputLabel value="#{o}"/>
+                                    </b:column>
+                                    <b:column span="3">
+                                        <h:outputLabel value="#{punkt}"/>
+                                    </b:column>
+                                </b:row>
+                            </ui:repeat>
+                        </ui:repeat>
+                    </li>
+                </ul>
+            </h:panelGroup> 
+
+        </b:container>
+    </ui:define>
+</ui:composition>

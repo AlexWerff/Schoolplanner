@@ -1,0 +1,202 @@
+<ui:composition template="/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="title">Fehlzeiten</ui:define>
+
+    <ui:define name="content">
+        <b:modal id="newexcuse" title="Neue Entschuldigung" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="delete-member-form">
+                <b:inputText placeholder="Titel" binding="#{inputTitle}" required="false"></b:inputText>
+                <b:inputText placeholder="Beschreibung" binding="#{inputDesc}" required="false"></b:inputText>
+                <b:selectOneMenu value="Kein Kurs" id="brandID" binding="#{inputCourse}">
+                    <f:selectItem itemLabel="Kein Kurs" itemValue="0"/>
+                    <f:selectItems value="#{ExcuseNoteController.courses}" var="c" itemValue="#{c.ID}"
+                                   itemLabel="#{c.name}"/>
+                </b:selectOneMenu>
+
+                <b:row>
+                    <b:column span="6">
+                        <b:dateTimePicker sideBySide="true" placeholder="Von" binding="#{inputFromTime}"
+                                          required="false"></b:dateTimePicker>
+                    </b:column>
+                    <b:column span="6">
+                        <b:dateTimePicker sideBySide="true" placeholder="Bis" binding="#{inputToTime}"
+                                          required="false"></b:dateTimePicker>
+                    </b:column>
+                </b:row>
+
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" value="Hinzufuegen"
+                                     style="margin-top:40px;margin-left:20px"
+                                     onclick="ajax:ExcuseNoteController.addNewExcuseNote(inputTitle.value,inputDesc.value,inputFromTime.value,inputToTime.value,inputCourse.value)"
+                                     oncomplete="javascript:$('#newexcuse').modal('hide');return false;"
+                                     update=":projects"/>
+                </div>
+            </h:form>
+        </b:modal>
+
+        <b:modal id="delete" title="Wirklich loeschen?" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="delete-task-form">
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" iconAwesome="fa-trash" value="Loeschen"
+                                     style="margin-top:40px;margin-left:20px"
+                                     action="#{ExcuseNoteController.deleteExcuseNote(excuseNote)}"
+                                     oncomplete="javascript:$('#delete').modal('hide');return false;"
+                                     update="projects"
+                    />
+                </div>
+            </h:form>
+        </b:modal>
+
+        <b:modal id="addFileModal" title="Datei hochladen" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="add-file-form" enctype="multipart/form-data">
+                <div style="width: 100%" align="center">
+                    <div class="file-upload-wrapper btn btn-danger" style="margin-bottom: 40px !important;">
+                        <span>Upload</span>
+                        <h:inputFile
+                                value="#{ExcuseNoteController.uploadFile}"
+                                id="uploadFileField"
+                                styleClass="file-input">
+                            <f:ajax listener="#{ExcuseNoteController.uploadFileChanged()}"
+                                    render="urlField"
+                                    event="change"></f:ajax>
+                        </h:inputFile>
+                    </div>
+                </div>
+                <b:inputText placeholder="Dateiname" binding="#{inputFilename}"></b:inputText>
+                <b:inputText placeholder="Url"
+                             binding="#{inputFileUrl}"
+                             value="#{ExcuseNoteController.currentUploadUrl}"
+                             id="urlField">
+                </b:inputText>
+            </h:form>
+            <h:form>
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <h:commandButton
+                            onclick="#{ExcuseNoteController.addFile(inputFilename.value,inputFileUrl.value)}"
+                            value="Speichern"
+                            styleClass="btn btn-danger"
+                            style="margin-top:40px;margin-left:20px" update=":projects"
+                            data-dismiss="modal" data-target="#addFileModal"></h:commandButton>
+                </div>
+            </h:form>
+        </b:modal>
+
+        <b:container style="overflow:scroll;margin-bottom:80px">
+            <b:row style="margin-bottom:60px">
+                <b:column span="4">
+                    <b:button value="Neu" look="danger" style="margin-top:15px" iconAwesome="fa-plus"
+                              onclick="javascript:$('#newexcuse').modal();return false;">
+                    </b:button>
+                </b:column>
+                <b:column span="4">
+                    <h1 align="center">Fehlzeiten</h1>
+                </b:column>
+                <b:column span="4">
+                    <b:inputText placeholder="Suchen" style="margin-top:15px"></b:inputText>
+                </b:column>
+            </b:row>
+
+            <h:panelGroup id="projects"> 
+                <h4 class="list-group-title">Unentschuldigt</h4>
+                <ul class="list-group list-group-repeat">
+                    <ui:repeat value="#{ExcuseNoteController.getNonExcusedNotes()}" var="excuseNote"> 
+                        <li class="list-group-item list-group-item-repeat"> 
+                            <b:row>
+                                <b:column span="2" styleClass="course-sub">
+                                    <h4 style="margin-top: 18px">#{ExcuseNoteController.getCourseByID(excuseNote.courseID).name}</h4>
+                                </b:column>
+                                <b:column span="1">
+                                    <h5><b>#{excuseNote.getExcuseDateFromFormatted()}</b> </h5>
+                                </b:column>
+                                <b:column span="1">
+                                    <h5><b>#{excuseNote.getExcuseDateToFormatted()}</b> </h5>
+                                </b:column>
+                                <b:column span="4">
+                                    <h5><b>#{excuseNote.title}</b> : <i>#{excuseNote.description}</i></h5>
+                                    <h5>
+                                        <a href="#{excuseNote.excuseFile.path}">
+                                            <small>Datei #{excuseNote.excuseFile.name}</small>
+                                        </a>
+                                    </h5>
+                                </b:column>
+                                <b:column span="4">
+                                    <div style="width: 100%" align="right">
+                                        <h:form>
+                                            <b:commandButton value="Hochladen" align="right"
+                                                             look="danger" iconAwesome="fa-upload"
+                                                             oncomplete="javascript:$('#addFileModal').modal();return false;"
+                                                             onclick="ajax:ExcuseNoteController.setCurrentExcuseNote(excuseNote)">  
+                                            </b:commandButton>
+                                            <b:commandButton value="#{excuseNote.getStringStatus()}" align="center"
+                                                             look="danger"
+                                                             iconAwesome="#{ExcuseNoteController.getExcuseNoteState(excuseNote)}"
+                                                             style="margin-right:20px"
+                                                             action="#{ExcuseNoteController.changeExcuseNoteState(excuseNote)}">  
+                                            </b:commandButton>
+                                            <b:commandButton value="Loeschen" align="center"
+                                                      look="danger" iconAwesome="fa-trash"
+                                                             action="#{ExcuseNoteController.deleteExcuseNote(excuseNote)}" update="projects">  
+                                            </b:commandButton>
+                                        </h:form>
+                                    </div>
+                                </b:column>
+                            </b:row>
+                        </li>
+                          </ui:repeat> 
+                </ul>
+                <h4 class="list-group-title">Entschuldigt</h4>
+                <ul class="list-group list-group-repeat">
+                    <ui:repeat value="#{ExcuseNoteController.getExcusedNotes()}" var="excuseNote"> 
+                        <li class="list-group-item list-group-item-repeat"> 
+                            <b:row>
+                                <b:column span="2" styleClass="course-sub">
+                                    <h4 style="margin-top: 18px">#{ExcuseNoteController.getCourseByID(excuseNote.courseID).name}</h4>
+                                </b:column>
+                                <b:column span="1">
+                                    <h5><b>#{excuseNote.getExcuseDateFromFormatted()}</b> </h5>
+                                </b:column>
+                                <b:column span="1">
+                                    <h5><b>#{excuseNote.getExcuseDateToFormatted()}</b> </h5>
+                                </b:column>
+                                <b:column span="5">
+                                    <h5><b>#{excuseNote.title}</b> : <i>#{excuseNote.description}</i></h5>
+
+                                </b:column>
+                                <b:column span="3">
+                                    <div style="width: 100%" align="right">
+                                        <h:form>
+                                            <b:commandButton value="#{excuseNote.getStringStatus()}" align="center"
+                                                             look="danger"
+                                                             iconAwesome="#{ExcuseNoteController.getExcuseNoteState(excuseNote)}"
+                                                             style="margin-right:20px"
+                                                             action="#{ExcuseNoteController.changeExcuseNoteState(excuseNote)}">  
+                                            </b:commandButton>
+                                            <b:commandButton value="Loeschen" align="center"
+                                                             look="danger" iconAwesome="fa-trash"
+                                                             action="#{ExcuseNoteController.deleteExcuseNote(excuseNote)}" update="projects">  
+                                            </b:commandButton>
+                                        </h:form>
+                                    </div>
+                                </b:column>
+                            </b:row>
+                        </li>
+                          </ui:repeat> 
+                </ul>
+            </h:panelGroup> 
+        </b:container>
+    </ui:define>
+</ui:composition>

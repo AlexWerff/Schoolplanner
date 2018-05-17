@@ -1,0 +1,51 @@
+<ui:composition template="/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui"
+>
+    <ui:define name="title">hello</ui:define>
+
+    <ui:define name="content">
+        <b:container style="overflow:scroll;margin-bottom:80px">
+            <b:row>
+                <h1 align="center" style="margin-bottom: 60px">Willkommen</h1>
+            </b:row>
+            <b:row>
+                <b:carousel id="parque" styleClass="main-image">
+                    <b:carouselItem>
+                        <img src="img/4.png" alt="Valladolid" />
+                    </b:carouselItem>
+                    <b:carouselItem>
+                        <img src="img/5.png" alt="Valladolid" />
+                    </b:carouselItem>
+                    <b:carouselItem>
+                        <img src="img/6.png" alt="Valladolid" />
+                    </b:carouselItem>
+                </b:carousel>
+            </b:row>
+            <b:row>
+                <div style="width: 100%;margin-bottom: 100px" align="center">
+                    <h3 align="center" style="margin-top: 60px">Schon angemeldet?</h3>
+                    <a href="login.xhtml">
+                        <b:button look="danger" value="LOGIN" styleClass="login-button"></b:button>
+                </a>
+                </div>
+            </b:row>
+
+            <b:row>
+                <div style="width: 100%;margin-bottom: 100px" align="center">
+                    <h3 align="center" style="margin-top: 60px">Noch nicht angemeldet?</h3>
+                    <a href="register.xhtml">
+                        <b:button look="danger" value="REGISTRIEREN" styleClass="login-button"></b:button>
+                    </a>
+                </div>
+            </b:row>
+            <b:row style="margin-top:60px;margin-bottom:60px">
+                <h3 align="center" style="margin-bottom:60px">Unsere Partner</h3>
+                <b:image value="img/sponsors.png" styleClass="full-width-image"></b:image>
+            </b:row>
+        </b:container>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,147 @@
+<ui:composition template="/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="title">hello</ui:define>
+
+    <ui:define name="content">
+        <b:modal id="amodal" title="Neuer Termin" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="delete-member-form">
+                <b:inputText placeholder="Titel" binding="#{inputTitle}" required="false"></b:inputText>
+                <b:inputText placeholder="Beschreibung" binding="#{inputDesc}" required="false"></b:inputText>
+                <b:selectOneMenu value="Kein Typ" id="brandID" binding="#{inputType}">
+                    <f:selectItem itemLabel="Kein Typ" itemValue="0"/>
+                    <f:selectItems value="#{AppointmentController.appointmentTypes}" var="c" itemValue="#{c.ID}"
+                                   itemLabel="#{c.name}"/>
+                </b:selectOneMenu>
+                <h:outputLabel value="Von"></h:outputLabel>
+                <b:dateTimePicker placeholder="Von wann" binding="#{inputTimeFrom}" required="false"></b:dateTimePicker>
+                <h:outputLabel value="Bis"></h:outputLabel>
+                <b:dateTimePicker placeholder="Bis wann" binding="#{inputTimeTo}" required="false"></b:dateTimePicker>
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" value="Hinzufuegen"
+                                     style="margin-top:40px;margin-left:20px"
+                                     onclick="ajax:AppointmentController.addNewAppointment(inputTitle.value,inputDesc.value,inputTimeFrom.value,inputTimeTo.value,inputType.value)"
+                                     oncomplete="javascript:$('#amodal').modal('hide');return false;"
+                                     update="events"/>
+                </div>
+            </h:form>
+        </b:modal>
+
+        <b:modal id="delete-appointment-modal" title="Wirklich loeschen?" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="delete-task-form">
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" iconAwesome="fa-trash" value="Loeschen"
+                                     style="margin-top:40px;margin-left:20px"
+                                     action="#{AppointmentController.deleteAppointment(AppointmentController.currentAppointment)}"
+                                     oncomplete="javascript:$('#deleteEval').modal('hide');return false;"
+                                     update="events"/>
+                </div>
+            </h:form>
+        </b:modal>
+
+
+        <b:container style="overflow:scroll;margin-bottom:80px" id="tasks">
+            <b:row style="margin-bottom:60px;">
+                <b:column span="4">
+                    <b:button value="Neu" look="danger" style="margin-top:15px" iconAwesome="fa-plus"
+                              onclick="$('.modalPseudoClass').modal();return false;"
+                              rendered="#{AppointmentController.canAddAppointment()}"
+                    />
+                </b:column>
+                <b:column span="4">
+                    <h1 align="center">Kalender</h1>
+                </b:column>
+                <b:column span="4">
+                    <h:form>
+                        <b:inputText placeholder="Suchen" style="margin-top:15px" binding="#{inputSearch}">
+                            <f:ajax listener="#{AppointmentController.onSearch(inputSearch.value)}"
+                                    render="full-content"/>
+                        </b:inputText>
+                    </h:form>
+                </b:column>
+            </b:row>
+
+            <h:panelGroup id="full-content">
+
+                <h:panelGroup id="events" style="#{AppointmentController.getEventsStyle()}"> 
+                    <h:form>
+                        <b:commandButton value="#{AppointmentController.quartal ? 'Monat':'Quartal'}"
+                                         onclick="#{AppointmentController.setToQuartal()}"
+                                         look="danger" styleClass="appointment-quartal-button"></b:commandButton>
+                    </h:form>
+                    <b:row rendered="#{!AppointmentController.quartal}">
+                        <b:fullCalendar
+                                events="#{AppointmentController.calendarJSON}">
+
+                        </b:fullCalendar>
+                    </b:row>
+
+                    <b:row rendered="#{AppointmentController.quartal}">
+                        <b:column span="4">
+                            <b:fullCalendar events="#{AppointmentController.calendarJSON}"
+                                            defaultDate="#{AppointmentController.getDefaultDate(1)}"
+                                            calendarHeader="{left: 'prev,next today', center: 'title', right: ''}">
+                            </b:fullCalendar>
+                        </b:column>
+                        <b:column span="4">
+                            <b:fullCalendar events="#{AppointmentController.calendarJSON}"
+                                            defaultDate="#{AppointmentController.getDefaultDate(2)}"
+                                            calendarHeader="{left: 'prev,next today', center: 'title', right: ''}">
+                            </b:fullCalendar>
+                        </b:column>
+                        <b:column span="4">
+                            <b:fullCalendar events="#{AppointmentController.calendarJSON}"
+                                            defaultDate="#{AppointmentController.getDefaultDate(3)}"
+                                            calendarHeader="{left: 'prev,next today', center: 'title', right: ''}">
+                            </b:fullCalendar>
+                        </b:column>
+                    </b:row>
+                </h:panelGroup>
+
+                <h:panelGroup id="searched" style="#{AppointmentController.getSearchStyle()}"> 
+                    <h4 class="list-group-title">
+                        Suchergebnisse
+                    </h4>
+                    <ul class="list-group list-group-repeat">
+                        <h:form id="delete-appointment">
+                            <ui:repeat value="#{AppointmentController.getSearchAppointments()}" var="appointment"> 
+                                <li class="list-group-item list-group-item-repeat"> 
+                                    <b:row>
+                                        <b:column span="1" styleClass="course-sub">
+                                            <i class="fa fa-graduation-cap fa-2x"
+                                               style="margin-top: 17px"
+                                               aria-hidden="true"></i>
+                                        </b:column>
+                                        <b:column span="9">
+                                            <h5 style="margin-top: 13px"><b>#{appointment.title}</b> :
+                                                <i>#{course.description}</i></h5>
+                                        </b:column>
+                                        <b:column span="2">
+
+                                            <b:commandButton look="danger" value="Loeschen"
+                                                             iconAwesome="fa-trash"
+                                                             onclick="ajax:AppointmentController.setCurrentAppointment(appointment)"
+                                                             oncomplete="javascript:$('#delete-appointment-modal').modal();return false;">
+                                            </b:commandButton>
+
+                                        </b:column>
+                                    </b:row>
+                                </li>
+                            </ui:repeat> 
+                        </h:form>
+                    </ul>
+                </h:panelGroup> 
+            </h:panelGroup>
+        </b:container>
+    </ui:define>
+</ui:composition>

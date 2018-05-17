@@ -1,0 +1,502 @@
+<ui:composition template="/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="title">Aufgaben</ui:define>
+
+    <ui:define name="content">
+
+        <b:modal id="eval" title="Einschätzungsbogen" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="delete-member-form">
+                <b:carousel id="wizard" styleClass="wizardPseudoClass"
+                            startAnimation="false"
+                            showIndicators="false"
+                            wrap="false">
+                    <b:carouselItem style="height:330px">
+                                <b:row style="margin-top:30px">
+                                    <b:column span="5">
+                                        <b:datepicker placeholder="Von" binding="#{inputVon}" required="false"/>
+                                    </b:column>
+                                    <b:column span="5" style="right:0px">
+                                        <b:datepicker placeholder="Bis" binding="#{inputBis}" required="false"/>
+                                    </b:column>
+                                </b:row>
+                    </b:carouselItem>
+
+                    <b:carouselItem style="height:330px">
+                        <b:row style="margin-top:30px">
+                            <b:column offset="1" span="7">
+                                <h:outputLabel value="Ich bin pünktlich zum Unterricht."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{zu1}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel
+                                        value="Zu Unterrichtsbeginn habe ich alle notwendigen Arbeitsmittel bereit."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{zu2}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel
+                                        value="Ich erledige sonstige Aufgaben vollständig und termingerecht."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{zu3}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                    </b:carouselItem>
+
+                    <b:carouselItem style="height:330px">
+                        <b:row style="margin-top:30px">
+                            <b:column offset="1" span="7">
+                                <h:outputLabel
+                                        value="Ich führe meine Hefte und Hefter sorgfältig und vollständig."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{sorg1}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel
+                                        value="Ich halte eine gute Ordnung, die mir beim Arbeiten hilft."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{sorg2}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel
+                                        value="Ich behandle fremdes Eigentum (von Mitschülern und Schule) sorgsam."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{sorg3}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                    </b:carouselItem>
+
+                    <b:carouselItem style="height:330px">
+                        <b:row style="margin-top:30px">
+                            <b:column offset="1" span="7">
+                                <h:outputLabel value="Ich arbeite im Unterricht aktiv mit."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{leis1}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel value="Ich arbeite mit Ausdauer an meinen Lernaufgaben."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{leis2}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel
+                                        value="Ich arbeite konzentriert und lasse mich nicht ablenken."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{leis3}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel
+                                        value="Ich bin bereit mich anzustrengen, um Aufgaben erfolgreich zu erledigen."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{leis4}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                    </b:carouselItem>
+
+                    <b:carouselItem style="height:330px">
+                        <b:row style="margin-top:30px">
+                            <b:column offset="1" span="7">
+                                <h:outputLabel
+                                        value="Ich führe meinen Schulplaner (Aufgaben, Termine) selbstständig."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{selbst1}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel value="Ich führe meine Hefter und Hefte selbstständig."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{selbst2}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel value="Ich beschaffe mir selbstständig Informationen"/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{selbst3}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel
+                                        value="Ich kann ohne zusätzliche Anleitung Arbeitsaufträge erledigen."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{selbst4}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel
+                                        value="Ich kontrolliere meine Arbeitsergebnisse selbstständig."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{selbst5}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                    </b:carouselItem>
+
+                    <b:carouselItem style="height:330px">
+                        <b:row style="margin-top:30px">
+                            <b:column offset="1" span="7">
+                                <h:outputLabel
+                                        value="Ich erfülle meine Aufgaben bei Gruppenarbeiten, in der Klasse und Schule."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{kooperation1}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel value="Ich übernehme freiwillig Aufgaben."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{kooperation2}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel
+                                        value="Ich kann kritisieren ohne andere zu verletzen und nehme Kritik an."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{kooperation3}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                    </b:carouselItem>
+
+                    <b:carouselItem style="height:330px">
+                        <b:row style="margin-top:30px">
+                            <b:column offset="1" span="7">
+                                <h:outputLabel
+                                        value="Ich halte die Schulregeln und die Klassenregeln ein."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{sozial1}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel value="Ich gehe respektvoll mit meinen Mitmenschen um."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{sozial2}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel value="Ich höre anderen zu und schaue sie dabei an."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{sozial3}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel value="Ich sage anderen angemessen meine Meinung."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{sozial4}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel value="Ich lasse mir helfen und helfe anderen."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{sozial5}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column offset="1" span="7">
+                                <h:outputLabel
+                                        value="Ich kann Konflikte alleine oder mit Hilfe gewaltfrei lösen."/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:selectOneMenu binding="#{sozial6}" style="width:60px">
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <f:selectItem itemLabel="3" itemValue="3"/>
+                                    <f:selectItem itemLabel="4" itemValue="4"/>
+                                </b:selectOneMenu>
+                            </b:column>
+                        </b:row>
+                    </b:carouselItem>
+
+                    <b:carouselItem style="height:330px">
+                            <b:row style="margin-top:30px">
+                                <b:column span="8">
+                                    <h:outputLabel value="Ich kann besonders gut"/>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column offset="1" span="10">
+                                    <b:inputTextarea rows="4" binding="#{text}"></b:inputTextarea>
+                                </b:column>
+                            </b:row>
+                    </b:carouselItem>
+
+                    <b:carouselControl direction="right">
+                        <b:commandButton value="Zurück" role="button"
+                                         onclick="$('.wizardPseudoClass').carousel('prev');$('.wizardPseudoClass').carousel('pause'); return false;"/>
+                    </b:carouselControl>
+                    <b:carouselControl direction="left">
+                        <b:commandButton value="Weiter" role="button" style="position:absolute;right:0px"
+                                         onclick="$('.wizardPseudoClass').carousel('next');$('.wizardPseudoClass').carousel('pause'); return false;"
+                                         look="danger"/>
+                    </b:carouselControl>
+                </b:carousel>
+
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" value="Hinzufügen"
+                                     style="margin-top:40px;margin-left:20px"
+                                     onclick="ajax:EvaluationController.addCurEvaluation(inputVon.value,inputBis.value,
+                                      zu1.value,  zu2.value,  zu3.value,sorg1.value,  sorg2.value,  sorg3.value,
+                                      leis1.value,  leis2.value,  leis3.value,  leis4.value,
+                                      selbst1.value,  selbst2.value,  selbst3.value,  selbst4.value,  selbst5.value,
+                                      kooperation1.value,  kooperation2.value,  kooperation3.value,
+                                      sozial1.value,  sozial2.value,  sozial3.value,sozial4.value,sozial5.value, sozial6.value,text.value)"
+                                     oncomplete="javascript:$('#eval').modal('hide');return false;"
+                                     update="projects"/>
+                </div>
+            </h:form>
+        </b:modal>
+        <b:modal id="delete" title="Wirklich löschen?" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="delete-task-form">
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" iconAwesome="fa-trash" value="Löschen"
+                                     style="margin-top:40px;margin-left:20px"
+                                     action="#{EvaluationController.deleteEvalue(sub)}"
+                                     oncomplete="javascript:$('#delete').modal('hide');return false;"
+                                     update="projects"/>
+                </div>
+            </h:form>
+        </b:modal>
+
+        <b:container style="overflow:scroll;margin-bottom:80px">
+            <b:row style="margin-bottom:60px">
+                <b:column span="4">
+                    <h:form>
+                        <b:button value="Neu" look="danger" style="margin-top:15px" iconAwesome="fa-plus"
+                                  onclick="javascript:$('#eval').modal();return false;">
+                        </b:button>
+                    </h:form>
+                </b:column>
+                <b:column span="4">
+                    <h1 align="center">Selbsteinschätzung</h1>
+                </b:column>
+            </b:row>
+
+            <h:panelGroup id="projects"> 
+                <ul class="list-group list-group-repeat">
+                    <ui:repeat value="#{EvaluationController.getEvaluations()}" var="sub"> 
+                        <li class="list-group-item list-group-item-repeat"> 
+                            <b:row>
+                                <b:column span="3">
+                                    <h5>Meine Einschätzung von :</h5>
+                                </b:column>
+                                <b:column span="4">
+                                    <h5>
+                                        <b>#{EvaluationController.timeParser.timestampToTimestring(sub.beginn)}</b>   bis
+                                        <i>#{EvaluationController.timeParser.timestampToTimestring(sub.ende)}</i></h5>
+                                </b:column>
+                                <b:column span="5">
+                                    <div style="width: 100%" align="right">
+                                        <h:form>
+                                            <b:commandButton value="Ansehen" align="center"
+                                                             iconAwesome="fa-eye" look="info"
+                                                             style="margin-right:20px"
+                                                             action="#{EvaluationController.view()}">
+                                            </b:commandButton>
+                                            <b:commandButton value="Löschen" align="center"
+                                                             look="danger" iconAwesome="fa-trash"
+                                                             onclick="javascript:$('#delete').modal();return false;">
+                                            </b:commandButton>
+                                        </h:form>
+                                    </div>
+                                </b:column>
+                            </b:row>
+                        </li>
+                          </ui:repeat> 
+                </ul>
+            </h:panelGroup> 
+        </b:container>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,367 @@
+<ui:composition template="/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="title">Aufgaben</ui:define>
+
+    <ui:define name="content">
+        <b:modal id="edit-user" title="Benutzer verwalten" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="edit-user-form">
+                <b:tabView activeIndex="0">
+                    <b:tab title="Informationen">
+                        <f:facet name="anchor"><b:iconAwesome name="fa-user"/></f:facet>
+                        <h3 align="center">#{AdminController.currentMember.firstname} #{AdminController.currentMember.lastname}</h3>
+                        <b:inputText placeholder="Vorname" binding="#{inputFirstName}"
+                                     value="#{AdminController.currentMember.firstname}"></b:inputText>
+                        <b:inputText placeholder="Nachname" binding="#{inputLastName}"
+                                     value="#{AdminController.currentMember.lastname}"></b:inputText>
+                        <b:inputText placeholder="Username" binding="#{inputUsername}"
+                                     value="#{AdminController.currentMember.username}"></b:inputText>
+                        <b:inputText placeholder="Neues passwort" binding="#{inputPassword}"
+                                     value="#{AdminController.newPassword}"></b:inputText>
+                        <b:selectOneMenu value="Keine Rolle" id="brandID" binding="#{inputMemberRole}">
+                            <f:selectItem itemLabel="Keine Rolle" itemValue="0"/>
+                            <f:selectItems value="#{AdminController.memberRoles}" var="c" itemValue="#{c.ID}"
+                                           itemLabel="#{c.title}"/>
+                        </b:selectOneMenu>
+                    </b:tab>
+                    <b:tab title="Berechtigungen">
+                        <f:facet name="anchor"><b:iconAwesome name="fa-eye"/></f:facet>
+                        <b:tree
+                                render-root="false"
+                                value="#{AdminController.permissionTree}"
+                                showCheckbox="true"
+                                enableLinks="true"
+                                showBorder="true"
+                                nodeSelectionListener="#{AdminController}"/>
+
+                    </b:tab>
+                </b:tabView>
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" value="Speichern"
+                                     style="margin-top:40px;margin-left:20px"
+                                     onclick="#{AdminController.editUser(AdminController.currentMember,inputMemberRole.value)}"
+                                     data-dismiss="modal" data-target="#edit-user"
+                                     update="projects"/>
+                </div>
+            </h:form>
+        </b:modal>
+
+        <b:modal id="edit-role" title="Rolle verwalten" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="edit-role-form">
+
+                <b:tabView activeIndex="0">
+                    <b:tab title="Informationen">
+                        <f:facet name="anchor"><b:iconAwesome name="fa-user"/></f:facet>
+                        <b:inputText placeholder="Title" binding="#{inputRuleTitle}"
+                                     value="#{AdminController.currentRole.title}"></b:inputText>
+                        <b:inputText placeholder="Beschreibung" binding="#{inpuRuleDesc}"
+                                     value="#{AdminController.currentRole.description}"></b:inputText>
+                    </b:tab>
+
+                    <b:tab title="Berechtigungen">
+                        <f:facet name="anchor"><b:iconAwesome name="fa-eye"/></f:facet>
+                        <b:tree
+                                render-root="false"
+                                value="#{AdminController.permissionTree}"
+                                showCheckbox="true"
+                                enableLinks="true"
+                                showBorder="true"
+                                nodeSelectionListener="#{AdminController}"/>
+
+                    </b:tab>
+                </b:tabView>
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" value="Speichern"
+                                     style="margin-top:40px;margin-left:20px"
+                                     onclick="#{AdminController.editRole(AdminController.currentRole)}"
+                                     data-dismiss="modal" data-target="#edit-role"
+                                     update="projects"/>
+                </div>
+            </h:form>
+        </b:modal>
+
+        <b:modal id="edit-page" title="Seite bearbeiten" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false" size="modal-lg">
+            <h:form id="edit-page-form">
+                <b:inputTextarea placeholder="Eingabe..." value="#{AdminController.currentEditPageContent}"
+                                 binding="#{inputPageContent}">
+                    <f:ajax event="blur"/>
+                </b:inputTextarea>
+            </h:form>
+            <h:form>
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" value="Speichern"
+                                     style="margin-top:40px;margin-left:20px"
+                                     onclick="#{AdminController.savePageContent(inputPageContent.value)}"
+                                     data-dismiss="modal" data-target="#edit-page"
+                                     update="projects"/>
+                </div>
+            </h:form>
+        </b:modal>
+
+        <b:modal id="edit-register" title="Rolle verwalten" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="edit-register-form">
+
+                <b:tabView activeIndex="0">
+                    <b:tab title="Informationen">
+                        <f:facet name="anchor"><b:iconAwesome name="fa-user"/></f:facet>
+                        <b:inputText placeholder="Titel"
+                                     value="#{AdminController.currentRegister.title}"></b:inputText>
+                        <b:inputText placeholder="Beschreibung"
+                                     value="#{AdminController.currentRegister.description}"></b:inputText>
+                        <b:inputText placeholder="Anzahl" type="number"
+                                     value="#{AdminController.currentRegister.quantity}"></b:inputText>
+                    </b:tab>
+
+                    <b:tab title="Berechtigungen">
+                        <f:facet name="anchor"><b:iconAwesome name="fa-eye"/></f:facet>
+                        <b:tree
+                                render-root="false"
+                                value="#{AdminController.permissionTree}"
+                                showCheckbox="true"
+                                enableLinks="true"
+                                showBorder="true"
+                                nodeSelectionListener="#{AdminController}"/>
+
+                    </b:tab>
+                </b:tabView>
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" value="Speichern"
+                                     style="margin-top:40px;margin-left:20px"
+                                     onclick="#{AdminController.editRegister(AdminController.currentRegister)}"
+                                     data-dismiss="modal" data-target="#edit-role"
+                                     update="projects"/>
+                </div>
+            </h:form>
+        </b:modal>
+
+
+        <b:container style="overflow:scroll;margin-bottom:80px">
+            <b:row style="margin-bottom:60px">
+                <b:column span="4">
+                </b:column>
+                <b:column span="4">
+                    <h1 align="center">Administration</h1>
+                </b:column>
+                <b:column span="4">
+
+                </b:column>
+            </b:row>
+
+            <h:panelGroup id="projects"> 
+
+                <b:tabView activeIndex="0">
+                    <b:tab title="Benutzer">
+                        <f:facet name="anchor"><b:iconAwesome name="fa-users"/></f:facet>
+                        <b:row style="margin-top:30px;margin-bottom:60px">
+                            <b:column span="4"></b:column>
+                            <b:column span="4">
+                                <h3 class="list-group-title">Benutzer</h3>
+                            </b:column>
+                            <b:column span="4">
+                                <div style="width:100%" align="right">
+                                    <h:form>
+                                        <b:commandButton value="Neu" align="right"
+                                                         style="margin-top:15px;width:150px"
+                                                         look="danger"
+                                                         onclick="ajax:AdminController.addCurrentMember()"
+                                                         oncomplete="javascript:$('#edit-user').modal();return false;"
+                                                         update="edit-user:edit-user-form">  
+                                        </b:commandButton>
+                                    </h:form>
+                                </div>
+                            </b:column>
+                        </b:row>
+                        <ul class="list-group list-group-repeat">
+                            <h:form>
+                                <ui:repeat value="#{AdminController.members}" var="member"> 
+                                    <li class="list-group-item list-group-item-repeat"> 
+                                        <b:row>
+                                            <b:column span="9">
+                                                <h5><b>#{member.firstname}</b>  #{member.lastname}</h5>
+
+                                            </b:column>
+                                            <b:column span="3">
+
+                                                <div style="width: 100%" align="right">
+                                                    <b:commandButton look="danger" value="Bearbeiten"
+                                                                     iconAwesome="fa-cog"
+                                                                     style="margin-right:20px"
+                                                                     onclick="ajax:AdminController.setCurrentMember(member)"
+                                                                     oncomplete="javascript:$('#edit-user').modal();return false;"
+                                                                     update="edit-user:edit-user-form"/>
+                                                    <b:commandButton value="Loeschen" align="center"
+                                                                     look="danger" iconAwesome="fa-user-times"
+                                                                     action="#{AdminController.deleteUser(member)}">  
+                                                    </b:commandButton>
+                                                </div>
+
+                                            </b:column>
+                                        </b:row>
+                                    </li>
+                                </ui:repeat> 
+                            </h:form>
+                        </ul>
+                    </b:tab>
+                    <b:tab title="Rollen">
+                        <f:facet name="anchor"><b:iconAwesome name="fa-balance-scale"/></f:facet>
+                        <b:row style="margin-top:30px;margin-bottom:60px">
+                            <b:column span="4"></b:column>
+                            <b:column span="4">
+                                <h3 class="list-group-title">Rollen</h3>
+                            </b:column>
+                            <b:column span="4">
+                                <div style="width:100%" align="right">
+                                    <h:form>
+                                        <b:commandButton value="Neu" align="right"
+                                                         style="margin-top:15px;width:150px"
+                                                         look="danger"
+                                                         onclick="ajax:AdminController.addRole()"
+                                                         oncomplete="javascript:$('#edit-role').modal();return false;">  
+                                        </b:commandButton>
+                                    </h:form>
+                                </div>
+                            </b:column>
+                        </b:row>
+                        <ul class="list-group list-group-repeat">
+                            <ui:repeat value="#{AdminController.memberRoles}" var="role"> 
+                                <li class="list-group-item list-group-item-repeat"> 
+                                    <b:row>
+                                        <b:column span="9">
+                                            <h5><i class="fa fa-balance-scale" aria-hidden="true"></i>
+                                                <b>#{role.title}</b>  <i>#{role.description}</i></h5>
+
+                                        </b:column>
+                                        <b:column span="3">
+                                            <h:form>
+                                                <div style="width: 100%" align="right">
+                                                    <b:commandButton look="danger" value="Bearbeiten"
+                                                                     iconAwesome="fa-cog"
+                                                                     style="margin-right:20px"
+                                                                     onclick="ajax:AdminController.setCurrentRole(role)"
+                                                                     oncomplete="javascript:$('#edit-role').modal();return false;"
+                                                                     update="edit-role:edit-role-form"/>
+                                                    <b:commandButton value="Loeschen" align="center"
+                                                                     look="danger" iconAwesome="fa-user-times"
+                                                                     action="#{AdminController.deleteRole(role)}">  
+                                                    </b:commandButton>
+                                                </div>
+                                            </h:form>
+                                        </b:column>
+                                    </b:row>
+                                </li>
+                            </ui:repeat> 
+                        </ul>
+                    </b:tab>
+                    <b:tab title="Registrierung">
+                        <f:facet name="anchor"><b:iconAwesome name="fa-user-plus"/></f:facet>
+                        <b:row style="margin-top:30px;margin-bottom:60px">
+                            <b:column span="4"></b:column>
+                            <b:column span="4">
+                                <h3 class="list-group-title">Registrierungen</h3>
+                            </b:column>
+                            <b:column span="4">
+                                <div style="width:100%" align="right">
+                                    <h:form>
+                                        <b:commandButton value="Neu" align="right"
+                                                         style="margin-top:15px;width:150px"
+                                                         look="danger"
+                                                         onclick="ajax:AdminController.addRegisterCredit()"
+                                                         oncomplete="javascript:$('#edit-register').modal();return false;">  
+                                        </b:commandButton>
+                                    </h:form>
+                                </div>
+                            </b:column>
+                        </b:row>
+                        <ul class="list-group list-group-repeat">
+                            <ui:repeat value="#{AdminController.registerCredits}" var="register"> 
+                                <li class="list-group-item list-group-item-repeat"> 
+                                    <b:row>
+                                        <b:column span="4">
+                                            <h5>
+                                                <i class="fa fa-balance-scale" aria-hidden="true"></i>
+                                                <b>#{register.title}</b>  <i>#{register.description}</i>
+                                            </h5>
+
+                                        </b:column>
+                                        <b:column span="5">
+                                            <h5 align="center">
+                                                Passwort:
+                                                <b>
+                                                    #{register.password}
+                                                </b>
+                                            </h5>
+                                        </b:column>
+                                        <b:column span="3">
+                                            <h:form>
+                                                <div style="width: 100%" align="right">
+                                                    <b:commandButton look="danger" value="Bearbeiten"
+                                                                     iconAwesome="fa-cog"
+                                                                     style="margin-right:20px"
+                                                                     onclick="ajax:AdminController.setCurrentRegister(register)"
+                                                                     oncomplete="javascript:$('#edit-register').modal();return false;"
+                                                                     update="edit-register:edit-register-form"/>
+                                                    <b:commandButton value="Loeschen" align="center"
+                                                                     look="danger" iconAwesome="fa-user-times"
+                                                                     action="#{AdminController.deleteRegister(register)}">  
+                                                    </b:commandButton>
+                                                </div>
+                                            </h:form>
+                                        </b:column>
+                                    </b:row>
+                                </li>
+                            </ui:repeat> 
+                        </ul>
+                    </b:tab>
+                    <b:tab title="Seiten">
+                        <f:facet name="anchor"><b:iconAwesome name="fa-file-text-o"/></f:facet>
+                        <b:row>
+                            <ul class="list-group list-group-repeat">
+                                <ui:repeat value="#{AdminController.editPages}" var="page"> 
+                                    <li class="list-group-item list-group-item-repeat"> 
+                                        <b:row>
+                                            <b:column span="9">
+                                                <h5><i class="fa fa-balance-scale" aria-hidden="true"></i>
+                                                    <b>#{page.title}</b>  <i>#{page.description}</i></h5>
+
+                                            </b:column>
+                                            <b:column span="3">
+                                                <h:form>
+                                                    <div style="width: 100%" align="right">
+                                                        <b:commandButton look="danger" value="Bearbeiten"
+                                                                         iconAwesome="fa-edit"
+                                                                         style="margin-right:20px"
+                                                                         onclick="ajax:AdminController.editPage(page)"
+                                                                         oncomplete="javascript:$('#edit-page').modal();return false;"
+                                                                         update="edit-page:edit-page-form"/>
+                                                    </div>
+                                                </h:form>
+                                            </b:column>
+                                        </b:row>
+                                    </li>
+                                </ui:repeat> 
+                            </ul>
+                        </b:row>
+                    </b:tab>
+                </b:tabView>
+
+
+            </h:panelGroup> 
+        </b:container>
+    </ui:define>
+</ui:composition>

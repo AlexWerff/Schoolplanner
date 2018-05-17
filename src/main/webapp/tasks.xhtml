@@ -1,0 +1,141 @@
+<ui:composition template="/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="title">Aufgaben</ui:define>
+
+    <ui:define name="content">
+            <b:modal id="newtask" title="Neue Aufgabe" styleClass="modalPseudoClass"
+                     closable="true" close-on-escape="true" backdrop="false">
+                <h:form id="delete-member-form">
+                    <b:inputText placeholder="Titel" binding="#{inputTitle}" required="false"></b:inputText>
+                    <b:inputText placeholder="Beschreibung" binding="#{inputDesc}" required="false"></b:inputText>
+                    <b:selectOneMenu value="Kein Kurs" id="brandID" binding="#{inputCourse}">
+                        <f:selectItem itemLabel="Kein Kurs" itemValue="0"/>
+                        <f:selectItems value="#{TaskController.courses}" var="c" itemValue="#{c.ID}" itemLabel="#{c.name}"/>
+                    </b:selectOneMenu>
+                    <b:dateTimePicker placeholder="Bis wann" binding="#{inputTime}" required="false"></b:dateTimePicker>
+                    <div align="right">
+                        <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                                  style="margin-top:40px"/>
+                        <b:commandButton look="danger" value="Hinzufuegen"
+                                         style="margin-top:40px;margin-left:20px"
+                                         onclick="ajax:TaskController.addNewTask(inputTitle.value,inputDesc.value,inputTime.value,inputCourse.value)"
+                                         oncomplete="javascript:$('#newtask').modal('hide');return false;"
+                                         update="projects"  />
+                    </div>
+                </h:form>
+            </b:modal>
+
+        <b:modal id="delete" title="Wirklich loeschen?" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="delete-task-form">
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" iconAwesome="fa-trash" value="Loeschen"
+                                     style="margin-top:40px;margin-left:20px"
+                                     action="#{TaskController.deleteTask(task)}"
+                                     oncomplete="javascript:$('#delete').modal('hide');return false;"
+                                     update="projects"/>
+                </div>
+            </h:form>
+        </b:modal>
+
+            <b:container style="overflow:scroll;margin-bottom:80px">
+                <b:row style="margin-bottom:60px">
+                    <b:column span="4">
+                        <b:button value="Neu" look="danger" style="margin-top:15px" iconAwesome="fa-plus"
+                                  onclick="javascript:$('#newtask').modal();return false;" rendered="#{TaskController.canAdd()}">
+                        </b:button>
+                    </b:column>
+                    <b:column span="4">
+                        <h1 align="center">Aufgaben</h1>
+                    </b:column>
+                    <b:column span="4">
+                        <h:form>
+                            <b:inputText placeholder="Suchen" style="margin-top:15px" binding="#{inputSearch}">
+                                <f:ajax listener="#{TaskController.onSearch(inputSearch.value)}" render="projects"/>
+                            </b:inputText>
+                        </h:form>
+                    </b:column>
+                </b:row>
+
+                <h:panelGroup id="projects"> 
+                    <h4 class="list-group-title">Offene Aufgaben</h4>
+                    <ul class="list-group list-group-repeat">
+                        <ui:repeat value="#{TaskController.getOpenTasks()}" var="task"> 
+                            <li class="list-group-item list-group-item-repeat"> 
+                                <b:row>
+                                    <b:column span="1" styleClass="course-sub">
+                                        <h4 style="margin-top: 18px">#{TaskController.getCourseByID(task.courseID).name}</h4>
+                                    </b:column>
+                                    <b:column span="3">
+                                        <h5><b>#{task.getDueTimeFormatted()}</b> </h5>
+                                    </b:column>
+                                    <b:column span="5">
+                                        <h5><b>#{task.title}</b> : <i>#{task.description}</i></h5>
+
+                                    </b:column>
+                                    <b:column span="3">
+                                        <div style="width: 100%" align="right">
+                                            <h:form>
+                                                <b:commandButton value="#{task.getStringStatus()}" align="center"
+                                                                 look="danger" iconAwesome="#{TaskController.getTaskState(task)}"
+                                                                 style="margin-right:20px"
+                                                                 action="#{TaskController.changeTaskState(task)}">  
+                                                </b:commandButton>
+                                                <b:commandButton value="Loeschen" align="center"
+                                                                 look="danger" iconAwesome="fa-trash"
+                                                                 action="#{TaskController.deleteTask(task)}"
+                                                                 onclick="javascript:$('#delete').modal();return false;" rendered="#{TaskController.canDelete()}">  
+                                                </b:commandButton>
+                                            </h:form>
+                                        </div>
+                                    </b:column>
+                                </b:row>
+                            </li>
+                        </ui:repeat> 
+                    </ul>
+                    <h4 class="list-group-title">Abgeschlossene Aufgaben</h4>
+                    <ul class="list-group list-group-repeat">
+                        <ui:repeat value="#{TaskController.getSolvedTasks()}" var="task"> 
+                            <li class="list-group-item list-group-item-repeat"> 
+                                <b:row>
+                                    <b:column span="2" styleClass="course-sub">
+                                        <h4 style="margin-top: 18px">#{TaskController.getCourseByID(task.courseID).name}</h4>
+                                    </b:column>
+                                    <b:column span="2">
+                                        <h5><b>#{task.getDueTimeFormatted()}</b> </h5>
+                                    </b:column>
+                                    <b:column span="5">
+                                        <h5><b>#{task.title}</b> : <i>#{task.description}</i></h5>
+
+                                    </b:column>
+                                    <b:column span="3">
+                                        <div style="width: 100%" align="right">
+                                            <h:form>
+                                                <b:commandButton value="#{task.getStringStatus()}" align="center"
+                                                                 look="danger" iconAwesome="#{TaskController.getTaskState(task)}"
+                                                                 style="margin-right:20px"
+                                                                 action="#{TaskController.changeTaskState(task)}">  
+                                                </b:commandButton>
+                                                <b:commandButton value="Loeschen" align="center"
+                                                                 look="danger" iconAwesome="fa-trash"
+                                                                 action="#{TaskController.deleteTask(task)}"
+                                                                 onclick="javascript:$('#delete').modal();return false;" rendered="#{TaskController.canDelete()}">  
+                                                </b:commandButton>
+                                            </h:form>
+                                        </div>
+                                    </b:column>
+                                </b:row>
+                            </li>
+                                </ui:repeat> 
+                    </ul>
+                </h:panelGroup> 
+            </b:container>
+    </ui:define>
+</ui:composition>

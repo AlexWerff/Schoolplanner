@@ -1,0 +1,506 @@
+<ui:composition template="/index.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:p="http://primefaces.org/ui"
+>
+    <ui:define name="title">hello</ui:define>
+
+    <ui:define name="content">
+
+        <b:modal id="addMemberModal" title="Benutzer hinzufuegen" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="add-member-modal">
+
+                <b:inputText tags="true" tiny-screen="full-width"
+                             placeholder="Benutzer"
+                             binding="#{userSelection}"
+                             typeahead="true"
+                             typeahead-values="#{CourseViewController.availableMembersCSV}"
+                             styleClass="input-typeahead"/>
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" value="Hinzufuegen"
+                                     style="margin-top:40px;margin-left:20px"
+                                     onclick="ajax:CourseViewController.addMembers(userSelection.value)"
+                                     oncomplete="javascript:$('#addMemberModal').modal('hide');return false;"
+                                     update="members"/>
+                </div>
+            </h:form>
+        </b:modal>
+
+        <b:modal id="addFileModal" title="Datei hochladen" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="add-file-form" enctype="multipart/form-data">
+                <div style="width: 100%" align="center">
+                    <div class="file-upload-wrapper btn btn-danger" style="margin-bottom: 40px !important;">
+                        <span>Upload</span>
+                        <h:inputFile
+                                value="#{CourseViewController.uploadFile}"
+                                id="uploadFileField"
+                                styleClass="file-input">
+                            <f:ajax listener="#{CourseViewController.uploadFileChanged()}"
+                                    render="urlField"
+                                    event="change"></f:ajax>
+                        </h:inputFile>
+                    </div>
+                </div>
+                <b:inputText placeholder="Dateiname" binding="#{inputFilename}"></b:inputText>
+                <b:inputText placeholder="Url"
+                             binding="#{inputFileUrl}"
+                             value="#{CourseViewController.currentUploadUrl}"
+                             id="urlField">
+                </b:inputText>
+            </h:form>
+            <h:form>
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <h:commandButton
+                            onclick="#{SubstitutionScheduleController.addFile(inputFilename.value,inputFileUrl.value)}"
+                            value="Speichern"
+                            styleClass="btn btn-danger"
+                            style="margin-top:40px;margin-left:20px" update=":files"
+                            data-dismiss="modal" data-target="#addFileModal"></h:commandButton>
+                </div>
+            </h:form>
+        </b:modal>
+
+        <b:modal id="newEventModal" title="Neues Event" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="add-event-form">
+                <b:inputText placeholder="Titel" binding="#{inputEventTitle}" required="false"></b:inputText>
+                <b:inputText placeholder="Beschreibung" binding="#{inputEventDesc}" required="false"></b:inputText>
+                <b:selectOneMenu value="Kein Typ" id="brandID" binding="#{inputType}">
+                    <f:selectItem itemLabel="Kein Typ" itemValue="0"/>
+                    <f:selectItems value="#{CourseViewController.appointmentTypes}" var="c" itemValue="#{c.ID}"
+                                   itemLabel="#{c.name}"/>
+                </b:selectOneMenu>
+                <h:outputLabel value="Von"></h:outputLabel>
+                <b:dateTimePicker placeholder="Von wann" binding="#{inputEventTimeFrom}"
+                                  required="false"></b:dateTimePicker>
+                <h:outputLabel value="Von"></h:outputLabel>
+                <b:dateTimePicker placeholder="Bis wann" binding="#{inputEventTimeTo}"
+                                  required="false"></b:dateTimePicker>
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" value="Hinzufuegen"
+                                     style="margin-top:40px;margin-left:20px"
+                                     onclick="ajax:CourseViewController.addEvent(inputEventTitle.value,inputEventDesc.value,inputEventTimeFrom.value,inputEventTimeTo.value,inputEventType.value)"
+                                     oncomplete="javascript:$('#newEventModal').modal('hide');return false;"
+                                     update="events"/>
+                </div>
+            </h:form>
+        </b:modal>
+
+        <b:modal id="newAnnouncementModal" title="Neue Ankuendigung" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="new-announcement-form">
+                <b:inputText placeholder="Titel" binding="#{inputAnnTitle}" required="false"></b:inputText>
+                <b:selectOneMenu value="Prioritaet" id="brandID" binding="#{inputPriority}">
+                    <f:selectItem itemLabel="Hoch" itemValue="0"/>
+                    <f:selectItem itemLabel="Mittel" itemValue="1"/>
+                    <f:selectItem itemLabel="Niedrig" itemValue="2"/>
+                </b:selectOneMenu>
+                <b:inputTextarea placeholder="Beschreibung" binding="#{inputAnnDesc}"
+                                 required="false"></b:inputTextarea>
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" value="Hinzufuegen"
+                                     style="margin-top:40px;margin-left:20px"
+                                     onclick="ajax:CourseViewController.addAnnouncement(inputAnnTitle.value,inputAnnDesc.value,inputPriority.value)"
+                                     oncomplete="javascript:$('#newAnnouncementModal').modal('hide');return false;"
+                                     update="announcements"/>
+                </div>
+            </h:form>
+        </b:modal>
+
+        <b:modal id="addPhoneModal" title="Benutzer hinzufuegen" styleClass="modalPseudoClass"
+                 closable="true" close-on-escape="true" backdrop="false">
+            <h:form id="add-phone-modal">
+                <b:selectOneMenu value="Unbekannt" id="brandID" binding="#{inputPhoneUser}">
+                    <f:selectItem itemLabel="Kein Typ" itemValue="0"/>
+                    <f:selectItems value="#{CourseViewController.members}" var="c" itemValue="#{c.ID}"
+                                   itemLabel="#{c.firstname} #{c.lastname}"/>
+                </b:selectOneMenu>
+                <div align="right">
+                    <b:button value="Abbrechen" dismiss="modal" onclick="return false;"
+                              style="margin-top:40px"/>
+                    <b:commandButton look="danger" value="Hinzufuegen"
+                                     style="margin-top:40px;margin-left:20px"
+                                     onclick="ajax:CourseViewController.editPhoneMember(inputPhoneUser.value)"
+                                     oncomplete="javascript:$('#addPhoneModal').modal('hide');return false;"
+                    />
+                </div>
+            </h:form>
+        </b:modal>
+
+
+        <b:container style="overflow:scroll;margin-bottom:80px" id="courseInfo">
+            <h1 align="center">Kurs: #{CourseViewController.course.name}</h1>
+            <h4 align="center"
+                style="color:#999;margin-top:0px;margin-bottom: 60px">#{CourseViewController.course.description}</h4>
+
+
+            <div style="width: 100%;">
+            </div>
+
+
+            <b:tabView activeIndex="0">
+                <b:tab title="Teilnehmer">
+                    <f:facet name="anchor"><b:iconAwesome name="fa-users"/></f:facet>
+                    <b:row style="margin-top:30px;margin-bottom:60px">
+                        <b:column span="4"></b:column>
+                        <b:column span="4">
+                            <h3 align="center">Teilnehmer (#{CourseViewController.members.size()})</h3>
+                        </b:column>
+                        <b:column span="4">
+                            <div style="width:100%" align="right">
+                                <h:form>
+                                    <b:commandButton value="Hinzufuegen" align="right"
+                                                     style="margin-top:15px"
+                                                     look="danger" iconAwesome="fa-plus"
+                                                     onclick="javascript:$('#addMemberModal').modal();return false;">  
+                                    </b:commandButton>
+                                </h:form>
+                            </div>
+                        </b:column>
+                    </b:row>
+                    <h:panelGroup id="members">
+                        <ul class="list-group list-group-repeat" style="padding:30px">
+                            <ui:repeat value="#{CourseViewController.members}" var="member"> 
+                                <li class="list-group-item list-group-item-repeat"> 
+                                    <b:row>
+                                        <b:column span="1" styleClass="course-sub">
+                                            <a href="profile.xhtml?userID=#{member.ID}">
+                                                <b:image value="#{member.imageUrl}"
+                                                         styleClass="profile-image-nav"></b:image>
+                                            </a>
+                                        </b:column>
+                                        <b:column span="8">
+                                            <h5><b>#{member.firstname} #{member.lastname}</b> </h5>
+
+                                        </b:column>
+
+                                        <b:column span="3">
+                                            <h:form id="delete-member-form"
+                                                    rendered="#{!CourseViewController.meberIsSelf(member)}">
+                                                <div style="width: 100%" align="right">
+                                                    <b:commandButton look="info" value="Nachricht"
+                                                                     iconAwesome="fa-envelope"
+                                                                     onclick="ajax:CourseViewController.chatWithMember(member)"
+                                                                     oncomplete="return false;"
+                                                                     style="margin-right:20px"
+                                                                     update="members"/>
+                                                    <b:commandButton look="danger" value="Loeschen"
+                                                                     iconAwesome="fa-trash"
+                                                                     onclick="ajax:CourseViewController.deleteMember(member)"
+                                                                     oncomplete="return false;"
+                                                                     update="members"/>
+                                                </div>
+                                            </h:form>
+
+                                        </b:column>
+                                    </b:row>
+                                </li>
+                            </ui:repeat>
+                        </ul>
+                    </h:panelGroup>
+                </b:tab>
+                <b:tab title="Dateien">
+                    <f:facet name="anchor"><b:iconAwesome name="fa-files-o"/></f:facet>
+                    <h:panelGroup id="files">
+                        <b:row style="margin-top:30px;margin-bottom:60px">
+                            <b:column span="4"></b:column>
+                            <b:column span="4">
+                                <h3 align="center">Dateien (#{CourseViewController.files.size()})</h3>
+                            </b:column>
+                            <b:column span="4">
+                                <div style="width:100%" align="right">
+                                    <h:form>
+                                        <b:commandButton value="Hochladen" align="right"
+                                                         style="margin-top:15px"
+                                                         look="danger" iconAwesome="fa-upload"
+                                                         onclick="javascript:$('#addFileModal').modal();return false;">  
+                                        </b:commandButton>
+                                    </h:form>
+                                </div>
+                            </b:column>
+                        </b:row>
+
+                        <ul class="list-group list-group-repeat" style="padding:30px">
+                            <ui:repeat value="#{CourseViewController.files}" var="file"> 
+                                <li class="list-group-item list-group-item-repeat"> 
+                                    <b:row>
+                                        <a href="#{file.path}" class="link">
+                                            <b:column span="1" styleClass="course-sub">
+                                                <i class="fa fa-file-pdf-o fa-2x"
+                                                   aria-hidden="true"
+                                                   style="margin-top:13px"></i>
+                                            </b:column>
+                                            <b:column span="8">
+                                                <h5><b>#{file.name}</b> </h5>
+
+                                            </b:column>
+                                            <b:column span="1">
+                                                <h5></h5>
+                                            </b:column>
+
+                                            <b:column span="2">
+                                                <h:form id="delete-file-form">
+                                                    <b:commandButton look="danger" value="Loeschen"
+                                                                     iconAwesome="fa-trash"
+                                                                     style="width:100%;"
+                                                                     onclick="ajax:CourseViewController.deleteFile(file)"
+                                                                     oncomplete="return false;"
+                                                                     update="files"/>
+                                                </h:form>
+                                            </b:column>
+                                        </a>
+                                    </b:row>
+                                </li>
+                            </ui:repeat>
+                        </ul>
+                    </h:panelGroup>
+                </b:tab>
+                <b:tab title="Events">
+                    <f:facet name="anchor"><b:iconAwesome name="fa-calendar"/></f:facet>
+                    <h:panelGroup id="events">
+                        <b:row style="margin-top:30px;margin-bottom:60px">
+                            <b:column span="4"></b:column>
+                            <b:column span="4">
+                                <h3 align="center">Events (#{CourseViewController.events.size()})</h3>
+                            </b:column>
+                            <b:column span="4">
+                                <div style="width:100%" align="right">
+                                    <h:form>
+                                        <b:commandButton value="Neu" align="right"
+                                                         style="margin-top:15px"
+                                                         look="danger" iconAwesome="fa-plus"
+                                                         onclick="javascript:$('#newEventModal').modal();return false;">  
+                                        </b:commandButton>
+                                    </h:form>
+                                </div>
+                            </b:column>
+                        </b:row>
+
+                        <ul class="list-group list-group-repeat" style="padding:30px">
+                            <ui:repeat value="#{CourseViewController.events}" var="event"> 
+                                <li class="list-group-item list-group-item-repeat"> 
+                                    <b:row>
+                                        <b:column span="2" styleClass="course-sub">
+                                            <h4 style="margin-top: 18px">Heute 16:00</h4>
+                                        </b:column>
+                                        <b:column span="7">
+                                            <h5><b>#{event.title}</b> : <i>#{event.description}</i></h5>
+
+                                        </b:column>
+                                        <b:column span="1">
+                                            <h5></h5>
+                                        </b:column>
+
+                                        <b:column span="2">
+                                            <h:form id="delete-event-form">
+                                                <b:commandButton look="danger" value="Loeschen"
+                                                                 iconAwesome="fa-trash"
+                                                                 style="width:100%;"
+                                                                 onclick="ajax:CourseViewController.deleteEvent(event)"
+                                                                 oncomplete="return false;"
+                                                                 update="events"/>
+                                            </h:form>
+                                        </b:column>
+                                    </b:row>
+                                </li>
+                            </ui:repeat>
+                        </ul>
+                    </h:panelGroup>
+                </b:tab>
+                <b:tab title="Optionen" rendered="#{CourseViewController.shouldShowOptions()}">
+                    <f:facet name="anchor"><b:iconAwesome name="fa-cog"/></f:facet>
+                    <h:form>
+                        <b:row style="margin-top:30px;margin-bottom:60px">
+                            <b:column span="4">
+                            </b:column>
+                            <b:column span="4">
+                                <h3 align="center">Optionen</h3>
+                            </b:column>
+                            <b:column span="4">
+                                <div style="width: 100%" align="right">
+
+                                    <b:commandButton value="Speichern" align="center"
+                                                     style="margin-top:15px;margin-right:20px"
+                                                     look="info" iconAwesome="fa-save"
+                                                     onclick="ajax:CourseViewController.save()"
+                                                     oncomplete="return false;"
+                                                     update=":courseInfo">  
+                                    </b:commandButton>
+
+                                    <b:commandButton look="danger" value="Loeschen"
+                                                     iconAwesome="fa-trash"
+                                                     style="margin-top:15px"
+                                                     onclick="ajax:CourseViewController.deleteCourse()"
+                                                     oncomplete="return false;"
+                                                     update=":courseInfo"/>
+
+                                </div>
+                            </b:column>
+                        </b:row>
+
+                        <ul class="list-group" style="padding:30px">
+
+                            <li class="list-group-item"> 
+                                <b:row>
+                                    <b:column span="6">
+                                        <div style="width: 100%" align="left">
+                                            <h4>Name</h4>
+                                        </div>
+                                    </b:column>
+                                    <b:column span="6">
+                                        <div style="width: 100%" align="right">
+                                            <b:inputText value="#{CourseViewController.course.name}"
+                                                         placeholder="Name">
+                                                <f:ajax event="change"></f:ajax>
+                                            </b:inputText>
+                                        </div>
+                                    </b:column>
+                                </b:row>
+                            </li>
+
+                            <li class="list-group-item"> 
+                                <b:row>
+                                    <b:column span="6">
+                                        <div style="width: 100%" align="left">
+                                            <h4>Beschreibung</h4>
+                                        </div>
+                                    </b:column>
+                                    <b:column span="6">
+                                        <div style="width: 100%" align="right">
+                                            <div style="width: 100%" align="right">
+                                                <h:form>
+                                                    <b:inputText value="#{CourseViewController.course.description}"
+                                                                 placeholder="Beschreibung">
+                                                        <f:ajax event="change"></f:ajax>
+                                                    </b:inputText>
+                                                </h:form>
+                                            </div>
+                                        </div>
+                                    </b:column>
+                                </b:row>
+                            </li>
+                        </ul>
+                    </h:form>
+                </b:tab>
+                <b:tab title="Ankuendigungen">
+                    <f:facet name="anchor"><b:iconAwesome name="fa-bell-o"/></f:facet>
+                    <h:panelGroup id="announcements">
+                        <b:row style="margin-top:30px;margin-bottom:60px">
+                            <b:column span="4"></b:column>
+                            <b:column span="4">
+                                <h3 align="center">Ankuendigungen (#{CourseViewController.events.size()})</h3>
+                            </b:column>
+                            <b:column span="4">
+                                <div style="width:100%" align="right">
+                                    <h:form>
+                                        <b:commandButton value="Neu" align="right"
+                                                         style="margin-top:15px"
+                                                         look="danger" iconAwesome="fa-plus"
+                                                         onclick="javascript:$('#newAnnouncementModal').modal();return false;">  
+                                        </b:commandButton>
+                                    </h:form>
+                                </div>
+                            </b:column>
+                        </b:row>
+
+
+                        <ul class="list-group list-group-repeat" style="padding:30px">
+                            <ui:repeat value="#{CourseViewController.announcements}" var="announcement"> 
+                                <li class="list-group-item list-group-item-repeat"> 
+                                    <b:row>
+                                        <b:column span="1" styleClass="course-sub">
+                                            <i class="fa fa-bell-o fa-2x" aria-hidden="true"
+                                               style="margin-top:13px;#{CourseViewController.getColor(announcement)}"></i>
+                                        </b:column>
+                                        <b:column span="8">
+                                            <h5><b>#{announcement.title} </b> : <i>#{announcement.description}</i></h5>
+                                        </b:column>
+                                        <b:column span="1">
+                                            <h5></h5>
+                                        </b:column>
+
+                                        <b:column span="2">
+                                            <h:form id="delete-announcement-form">
+                                                <b:commandButton look="danger" value="Loeschen"
+                                                                 iconAwesome="fa-trash"
+                                                                 style="width:100%;"
+                                                                 onclick="ajax:CourseViewController.deleteAnnouncement(announcement)"
+                                                                 oncomplete="return false;"
+                                                                 update="announcements"/>
+                                            </h:form>
+                                        </b:column>
+                                    </b:row>
+                                </li>
+                            </ui:repeat>
+                        </ul>
+                    </h:panelGroup>
+
+
+                </b:tab>
+                <b:tab title="Telefonkette">
+                    <f:facet name="anchor"><b:iconAwesome name="fa-phone"/></f:facet>
+                    <b:row style="margin-top:30px;margin-bottom:60px">
+                        <b:column span="4"></b:column>
+                        <b:column span="4">
+                            <h3 align="center">Telefonkette (#{CourseViewController.events.size()})</h3>
+                        </b:column>
+                        <b:column span="4">
+                            <div style="width:100%" align="right">
+
+                            </div>
+                        </b:column>
+                    </b:row>
+
+                    <b:row>
+                        <b:column span="3"></b:column>
+                        <b:column span="6">
+                            <h:panelGroup id="phone-tree">
+                                <h:form>
+                                    <p:tree value="#{CourseViewController.phoneTree}" var="node"
+                                            orientation="horizontal" styleClass="phone-tree">
+                                        <p:treeNode>
+                                            <h:outputText value="#{CourseViewController.getNodeText(node)}" id="tree-node"/>
+                                            <p:growl id="messages" showDetail="true"/>
+
+                                            <p:contextMenu for="tree-node">
+                                                <p:menuitem value="Bearbeiten" update="phone-tree"
+                                                            actionListener="#{courseViewController.setCurrentNode(node)}"
+                                                            oncomplete="javascript:$('#addPhoneModal').modal();return false;"
+                                                            icon="ui-icon-disk"/>
+                                                <p:menuitem value="Hinzufügen" update="phone-tree"
+                                                            actionListener="#{courseViewController.addToPhoneTree(node)}"
+                                                            icon="ui-icon-disk"/>
+                                                <p:menuitem value="Loeschen"
+                                                            actionListener="#{courseViewController.removeFromPhoneTree(node)}"
+                                                            update="phone-tree" icon="ui-icon-close"/>
+                                            </p:contextMenu>
+                                        </p:treeNode>
+                                    </p:tree>
+                                </h:form>
+                            </h:panelGroup>
+
+                        </b:column>
+                        <b:column span="3"></b:column>
+
+
+                    </b:row>
+
+
+                </b:tab>
+            </b:tabView>
+        </b:container>
+    </ui:define>
+</ui:composition>
